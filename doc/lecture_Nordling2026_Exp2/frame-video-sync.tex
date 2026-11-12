@@ -1,0 +1,25 @@
+% Copyright 2026 Torbjörn E. M. Nordling
+% SPDX-License-Identifier: Apache-2.0
+% frame-video-sync.tex — Speed and clock (17:00–18:30)
+% Article §2.4 (+-23 ms quadratic window, \OmegaSd, \TimingSd; 4.2 ms frame
+% interval, §4). Figure fig-methods.pdf from the supplementary: synthetic data,
+% no value is a measurement; (a) once-per-turn correction, (b) speed window,
+% (c) LED edge, (d) clock fit t_k = a + (1 + delta) taubar_k.
+\begin{frame}{Speed and clock}{Illustrated on synthetic data: no value in the figure is a measurement}
+  \footnotesize
+  \begin{columns}[T]
+    \column{0.58\textwidth}
+    \centering
+    \includegraphics[width=\linewidth, height=0.78\textheight, keepaspectratio]{fig-methods.pdf}
+    \column{0.4\textwidth}
+    \scriptsize
+    \begin{itemize}\setlength{\itemsep}{2pt}
+      \item[(a)] Remove the angle error that repeats once per wheel turn.
+      \item[(b)] Speed $\omega_i$: slope of a quadratic fitted to the angle within $\pm 23$\,ms; typical $\sigma_\omega$ \OmegaSd\,rad/s.
+      \item[(c)] Each frame is timed by its own timestamp: the phone drops frames.
+      \item[(d)] Fit the LED edge times in the video against the Pi's logged times, $t_k = a + (1+\delta)\,\bar\tau_k$: offset $a$ and drift $\delta$ place every command on the video clock, within about \TimingSd\,ms.
+    \end{itemize}
+    \vspace{2pt}
+    At 240 frames/s, delays below one frame interval, 4.2\,ms, are not resolved.
+  \end{columns}
+\end{frame}

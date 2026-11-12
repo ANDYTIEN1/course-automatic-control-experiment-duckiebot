@@ -1,0 +1,10 @@
+# Copyright 2026 Torbjörn E. M. Nordling <t@nordlinglab.org>
+# SPDX-License-Identifier: Apache-2.0
+# Python >= 3.12 (NumPy >= 2.5 and SciPy >= 1.18 require it). track_video.py and select_wheel_frames.py also need
+# ffmpeg and ffprobe on the PATH to decode the videos.
+matplotlib>=3.11.2
+numpy>=2.5.3
+pyarrow>=26.0.0
+scipy>=1.18.1
+# Only for running scripts/tests:
+pytest

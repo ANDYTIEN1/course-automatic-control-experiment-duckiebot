@@ -1,0 +1,39 @@
+% The Nordling Lab Presentation theme created by Victor Osorio and Torbjörn Nordling, implemented using Beamer by Jose Chang and Torbjörn Nordling.
+% Copyright 2017 by Nordling Lab, Nordron AB
+
+%Font Themes 
+%"A font theme dictates which fonts or font attributes are used in a presentation. As for colors, the font of all text elements used in a presentation can be specified independently." Beamer User Guide sec. 15.1
+
+% Font
+% Candara is preferred (matches the PowerPoint and Keynote templates), but it
+% is Microsoft-licensed and only ships with MS Office. Fall back to Lato, then
+% Source Sans 3 (both SIL OFL, available on macOS/Linux/Windows). Requires
+% LuaLaTeX (preferred) or XeLaTeX.
+\usepackage{fontspec}
+\IfFontExistsTF{Candara}{%
+  \setsansfont{Candara}%
+}{\IfFontExistsTF{Lato}{%
+  \setsansfont{Lato}%
+}{\IfFontExistsTF{Source Sans 3}{%
+  \setsansfont{Source Sans 3}%
+}{%
+  \PackageWarning{NordlingLab}{Neither Candara, Lato, nor Source Sans 3 found. Falling back to default sans-serif. Install one of them - see README.}%
+}}}
+\renewcommand{\familydefault}{\sfdefault}
+
+
+\mode<presentation>
+
+% Settings
+\setbeamerfont{title}{series=\bfseries,family=\sffamily, size=\LARGE}
+\setbeamerfont{subtitle}{series=\bfseries,family=\sffamily, size=\Large}
+\setbeamerfont{frametitle}{family=\sffamily, size=\Large}
+\setbeamerfont{framesubtitle}{family=\sffamily, size=\small}
+\setbeamerfont{author}{family=\sffamily, size=\Large}
+\setbeamerfont{institute}{family=\sffamily, size=\Large}
+\setbeamerfont{date in head/foot}{family=\sffamily, size=\tiny}
+\setbeamerfont{page number in head/foot}{family=\sffamily, size=\tiny}
+\setbeamerfont{footline}{family=\sffamily, size=\tiny}
+\setbeamerfont{section in sidebar}{family=\sffamily, size=\small}
+
+\mode<all>

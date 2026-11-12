@@ -1,0 +1,41 @@
+% Copyright 2026 Torbjörn E. M. Nordling
+% SPDX-License-Identifier: Apache-2.0
+% frame-git.tex — Hand-in by pull request, step 1: the data (22:30–23:30)
+% Beginner level (students do not know git). Hand-in rule (user, 2026-11-12):
+% one member forks the student-material repository on GitHub and adds the
+% others as collaborators on the fork; PR 1 holds the data folder(s), a TA must
+% approve it before the report PR. Remote upstream, PR target, and branch names
+% as in the student README (coordinator, 2026-11-12).
+\begin{frame}[fragile]{Hand in by pull request (1/2): your data}{One member forks the repository on GitHub and adds the others as collaborators}
+  \scriptsize
+  Course URL: \texttt{https://github.com/nordlinglab/course-automatic-control-experiment-duckiebot.git}
+  \begin{columns}[T]
+    \column{0.53\textwidth}
+\begin{verbatim}
+git clone <URL of your fork>
+cd <repository folder>
+git remote add upstream <course URL>
+git switch -c group03-data
+cd data/raw/db17-r5-left-m9
+git add setup.toml runs.csv trials.csv
+git add quality.md frames/*.parquet pi/*
+git commit -m "Add E1 and E2 of motor m9"
+git push -u origin group03-data
+git pull
+\end{verbatim}
+    \vspace{-6pt}
+    Then open the \alert{pull request} on GitHub, from your branch to \texttt{main} of the course repository.
+    \column{0.44\textwidth}
+    \begin{itemize}\setlength{\itemsep}{0pt}
+      \item \texttt{clone}: copy your fork to your PC, once.
+      \item \texttt{remote add}: name the course repository \texttt{upstream}, once.
+      \item \texttt{switch -c}: start a branch for this hand-in.
+      \item \texttt{add}: choose what to save, \alert{each by name}.
+      \item \texttt{commit}: save it with a message that says what.
+      \item \texttt{push}: send the branch to your fork.
+      \item \texttt{pull}: later, get your members' commits.
+    \end{itemize}
+    \vspace{2pt}
+    \textbf{PR 1 holds} only your data folder(s), organised as on the data slide. A \alert{TA must approve it} before your report PR.
+  \end{columns}
+\end{frame}

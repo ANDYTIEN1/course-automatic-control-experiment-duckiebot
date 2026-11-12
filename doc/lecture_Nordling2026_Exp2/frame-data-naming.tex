@@ -1,0 +1,36 @@
+% Copyright 2026 Torbjörn E. M. Nordling
+% SPDX-License-Identifier: Apache-2.0
+% frame-data-naming.tex — Data organisation and naming (20:30–21:30)
+% control-motor-duckiebot data/README.md v2.2.0 (folder names, run = video
+% name, only measured data stored; professor's standard db17-<robot>-<position>-<id>,
+% coordinator 2026-11-12) and Sam's guide §3.4 (labels R<k>-<side>-m<id>,
+% robots R1-R8, motors m1-m16), coordinator's facts of 2026-11-12.
+\begin{frame}[fragile]{Organise and name your data}{The name tells robot, position, and motor}
+  \footnotesize
+  \begin{columns}[T]
+    \column{0.5\textwidth}
+\begin{verbatim}
+data/
+  raw/       measured, committed
+    db17-r5-left-m9/
+      frames/  frame tables
+      pi/      Pi logs, unchanged
+  interim/   not committed
+  processed/ not committed
+\end{verbatim}
+    \vspace{-4pt}
+    \begin{itemize}\setlength{\itemsep}{1pt}
+      \item One folder per motor:\\ \texttt{db17-<robot>-<position>-<id>}, robot \texttt{r1}--\texttt{r8}, position \texttt{left}, \texttt{right}, or \texttt{both}, motor \texttt{m1}--\texttt{m16}, all lower case.
+      \item Both wheels: \texttt{db17-r5-both-m9-m10}, left motor first.
+    \end{itemize}
+    \column{0.47\textwidth}
+    \scriptsize
+    \begin{itemize}\setlength{\itemsep}{2pt}
+      \item The Pi writes its logs under the label \texttt{R5-L-m9}; copy them unchanged into \texttt{db17-r5-left-m9}.
+      \item A \alert{run} is one video; its name is the video's file name, e.g.\\ {\scriptsize\texttt{R5-L-m9\_C\_b060p040\_rep01-03\_<date>}}, date as \texttt{YYYYMMDD}.
+      \item \alert{Never rename} a run afterwards: the name links the video, its checksum, and its data.
+      \item Commit only measured data: frame tables, Pi logs, the run and trial lists, and the setup description.
+      \item Videos (1--2.4\,GB each): keep and back up \alert{outside} the repository.
+    \end{itemize}
+  \end{columns}
+\end{frame}

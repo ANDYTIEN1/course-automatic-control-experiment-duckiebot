@@ -1,0 +1,34 @@
+% Copyright 2026 Torbjörn E. M. Nordling
+% SPDX-License-Identifier: Apache-2.0
+% frame-compare-models.tex — How model candidates are compared (14:00–16:00)
+% Article §2.5 (Fitting) and §2.6 (Rise time, overshoot, settling time);
+% t_s = tau ln 100 = 4.6 tau, Franklin Eq. (3.73). Hand-out if time is short.
+\begin{frame}{Comparing model candidates}{Fit both, compare the error with the noise}
+  \footnotesize
+  \setlength{\abovedisplayskip}{2pt}\setlength{\belowdisplayskip}{2pt}
+  \begin{columns}[T]
+    \column{0.52\textwidth}
+    \textbf{Candidate 1}, first order: the step equation of the model slide.
+
+    \textbf{Candidate 2}, first order with dead time $\theta$:
+    \[
+      \omega_w(t) = \omega_w(0) + G\Delta u\big(1 - e^{-(t-\theta)/\tau}\big),\; t \ge \theta.
+    \]
+    \begin{itemize}\setlength{\itemsep}{2pt}
+      \item Fit the three repetitions together by \alert{weighted least squares}, weight $1/\sigma_\omega^2$, from 0.5\,s before the command to the end of the hold.
+      \item Compare the \alert{RMS residual}, relative to $G\,\Delta u$, with the RMS of $\sigma_\omega$: the error the noise alone gives.
+      \item Fit each repetition alone too; report value $\pm$ the standard deviation over the repetitions.
+    \end{itemize}
+    \column{0.45\textwidth}
+    \textbf{Describe each measured step} (Franklin §3.4):
+    \begin{itemize}\setlength{\itemsep}{2pt}
+      \item rise time $t_r$: 10\,\% to 90\,\% of the change;
+      \item overshoot $M_p$: largest excursion beyond the final value, over the change;
+      \item settling time $t_s$: stays within 1\,\% of the change.
+    \end{itemize}
+    First order: $t_s = \tau\ln 100 \approx 4.6\,\tau$.
+
+    \vspace{3pt}
+    \alert{If $G$ or $\tau$ changes with the step, no single linear model fits.}
+  \end{columns}
+\end{frame}

@@ -1,0 +1,24 @@
+% Copyright 2026 Torbjörn E. M. Nordling
+% SPDX-License-Identifier: Apache-2.0
+% frame-setup.tex — The robot and the kit (1:30–3:00)
+% Hardware: article §2.2 (Raspberry Pi 3, Adafruit DC & Stepper Motor HAT,
+% PCA9685, TB6612, Dagu DG01D 48:1, 240 frames/s video, no encoders on DB17).
+% Kit for students: Sam's guide §3.1 (green LED on GPIO21, blue tape). The
+% photo is article Fig. 1 (white marker, older LED); the caption says so.
+\begin{frame}{The setup}{Duckiebot DB17 on a stand, wheels free}
+  \footnotesize
+  \begin{columns}[T]
+    \column{0.47\textwidth}
+    \centering
+    \includegraphics[width=\linewidth, height=0.62\textheight, keepaspectratio]{photo-db17-wheel-video-frame.png}
+
+    {\scriptsize Video frame from the article's data: marker on the wheel, LED on the breadboard.}
+    \column{0.5\textwidth}
+    \begin{itemize}\setlength{\itemsep}{2pt}
+      \item Raspberry Pi with a motor HAT: it generates the \alert{PWM} that drives two Dagu DG01D 48:1 gearmotors.
+      \item A Python script on the Pi sets the duty $u \in [-1,1]$ and \alert{logs the time} of every command.
+      \item The DB17 has \alert{no wheel encoders}: a phone films the wheel side-on in slow motion, 1280$\times$720 pixels at 240 frames/s.
+      \item Your kit: \alert{blue tape} from hub to rim as marker, and a \alert{green LED} that the Pi switches just before each command, in view of the camera.
+    \end{itemize}
+  \end{columns}
+\end{frame}

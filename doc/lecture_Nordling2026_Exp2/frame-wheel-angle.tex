@@ -1,0 +1,20 @@
+% Copyright 2026 Torbjörn E. M. Nordling
+% SPDX-License-Identifier: Apache-2.0
+% frame-wheel-angle.tex — What the video shows: angle and LED (16:00–17:00)
+% Figure: fig-wheel.tex, copied unchanged from the article's supplementary
+% (Fig. "wheel"); schematic, offsets and errors enlarged, not a measurement.
+% Bullets paraphrase its caption (S2-S5).
+\begin{frame}{From video frame to wheel angle}{Schematic; offsets and errors enlarged}
+  \scriptsize
+  \begin{columns}[T]
+  \column{0.6\textwidth}
+  \centering
+  \resizebox{\linewidth}{!}{\input{fig-wheel.tex}}
+  \column{0.37\textwidth}
+  \begin{itemize}\setlength{\itemsep}{1pt}
+    \item[(a)] In each frame: hub centroid $\mathbf h_i$, marker centroid $\mathbf m_i$, the vector $\mathbf r_i$ between them, and the ellipse that the marker track forms.
+    \item[(b)] The map $\mathbf A$ turns the ellipse into a circle: the angle $\theta_i$ and its uncertainty $\sigma_{\theta,i}$ along the tangent.
+    \item[(c)] The LED switch lies between the last frame with the LED off and the first with it on; their midpoint $t_k$ times the logged command.
+  \end{itemize}
+  \end{columns}
+\end{frame}

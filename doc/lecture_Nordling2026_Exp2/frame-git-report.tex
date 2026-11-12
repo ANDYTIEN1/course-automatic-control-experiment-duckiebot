@@ -1,0 +1,40 @@
+% Copyright 2026 Torbjörn E. M. Nordling
+% SPDX-License-Identifier: Apache-2.0
+% frame-git-report.tex — Hand-in by pull request, step 2: the report (23:30–24:15)
+% PR 2: report source in doc/report_..._Group<NN>/ plus script changes, due
+% 2026-11-26 (user, 2026-11-12; syllabus: two weeks after the experiment).
+% Branch from upstream/main after git fetch upstream: the approved data PR is
+% merged into the course repository, and the fork's main does not update itself
+% (student README, coordinator 2026-11-12).
+\begin{frame}[fragile]{Hand in by pull request (2/2): your report}{After the TA has approved your data}
+  \scriptsize
+  \begin{columns}[T]
+    \column{0.55\textwidth}
+    Start the report branch from the course repository, which now holds your approved data:
+\begin{verbatim}
+git fetch upstream
+git switch -c group03-report upstream/main
+git add doc/<your report folder>
+git add scripts/<script you changed>
+git commit -m "Add the group report"
+git push -u origin group03-report
+\end{verbatim}
+    \vspace{-6pt}
+    Then open the second pull request on GitHub, again to \texttt{main} of the course repository. Run \texttt{git pull} before each work session.
+
+    \vspace{2pt}
+    \textbf{Someone pushed first?} Run \texttt{git pull}, fix the lines marked \texttt{<<<<<<<}, then \texttt{add}, \texttt{commit}, \texttt{push}.
+    \column{0.42\textwidth}
+    \textbf{PR 2 holds} the \LaTeX{} source of the report, \texttt{main.tex}, \texttt{references.bib}, and \texttt{figures/}, plus any changed scripts.
+
+    \vspace{2pt}
+    \textbf{Due: Thursday 2026-11-26.}
+
+    \vspace{4pt}
+    \begin{alertblock}{\scriptsize Never commit}
+      \scriptsize
+      videos; \texttt{data/processed/}, \texttt{data/interim/}; \texttt{build/}; \texttt{.venv/}.
+      Never \texttt{git add .}
+    \end{alertblock}
+  \end{columns}
+\end{frame}
