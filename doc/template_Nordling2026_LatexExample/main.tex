@@ -1,0 +1,335 @@
+% SPDX-FileCopyrightText: 2026 Torbjörn E. M. Nordling <t@nordlinglab.org>
+% SPDX-License-Identifier: Apache-2.0
+%
+% Every listed author of this manuscript belongs on the copyright line.
+% ninit knows only the person who scaffolded the project, so add one
+% further SPDX-FileCopyrightText line per co-author as they join.
+%
+% Example technical report. Copy this folder to
+% doc/report_FamilynameYEAR_TwoTitleWords_<StudentID>/, replace the text, and
+% keep the structure. Compile it from the repository root, so that every
+% build artefact lands in build/:
+%
+%   latexmk -pdf -cd \
+%     -outdir=../../build/template_Nordling2026_LatexExample \
+%     doc/template_Nordling2026_LatexExample/main.tex
+%
+% The report must compile with pdflatex; use lualatex (latexmk -lualatex)
+% only for Chinese text, as Appendix B explains.
+% !TEX program = pdflatex
+% !TeX encoding = UTF-8
+%
+\documentclass[10pt,a4paper,twocolumn]{article}
+\usepackage[margin=1.9cm,columnsep=0.6cm]{geometry}
+
+% ============================================================================
+% Compiler detection and font setup
+% ============================================================================
+% LuaLaTeX is required for Chinese/Japanese/Korean (CJK)) documents.
+% XeLaTeX also works for CJK. pdfLaTeX supports Latin, Latin Extended,
+% and Cyrillic scripts only.
+%
+% Font strategy:
+%   CJK body: Noto Serif CJK TC (Taiwan MOE-conformant Ming/Song style)
+%   CJK sans: Noto Sans CJK TC  (Taiwan MOE-conformant Hei/Gothic style)
+%   CJK mono: Noto Sans Mono CJK TC
+%   Latin:    Latin Modern (TeX Live bundled default)
+%
+% Install Noto CJK fonts (see Appendix B):
+%   macOS:  brew install --cask font-noto-serif-cjk-tc font-noto-sans-cjk-tc
+%   font-noto-sans-mono-cjk-tc
+%   Linux:  apt install fonts-noto-cjk fonts-noto-cjk-extra  (or distro equivalent)
+%   Windows: download from https://fonts.google.com/noto
+\usepackage{iftex}
+\ifluatex
+    % ── LuaLaTeX ─────────────────────────────────────────────────────────
+    \usepackage{fontspec}
+    % scheme=plain: load CJK font support without redefining \abstractname,
+    % \today, or section names to Chinese (keeps English/ISO defaults).
+    % fontset=none: avoid ctex auto-detecting macold fontset on modern macOS
+    % (STHeiti/STKaiti/STFangsong removed since macOS 10.12).
+    \usepackage[scheme=plain,fontset=none]{ctex}
+    \setCJKmainfont{Noto Serif CJK TC}
+    \setCJKsansfont{Noto Sans CJK TC}
+    \setCJKmonofont{Noto Sans Mono CJK TC}
+\else\ifxetex
+    % ── XeLaTeX ──────────────────────────────────────────────────────────
+    \usepackage{fontspec}
+    \usepackage{xeCJK}
+    \setCJKmainfont{Noto Serif CJK TC}
+    \setCJKsansfont{Noto Sans CJK TC}
+    \setCJKmonofont{Noto Sans Mono CJK TC}
+\else
+    % ── pdfLaTeX ─────────────────────────────────────────────────────────
+    % T1 encoding for correct hyphenation of latin scripts:
+    %   - All Western European (English, French, German, Spanish, Italian, etc.)
+    %   - All Nordic/Scandinavian (Swedish, Finnish, Danish, Norwegian, Icelandic)
+    %   - Central/Eastern European (Polish, Czech, Slovak, Hungarian, Romanian,
+    %     Croatian, Slovenian, Estonian, Latvian, Lithuanian,Turkish)
+    %   - Other Latin-script languages (Vietnamese with VNTeX, Esperanto, etc.)
+    \usepackage[T1]{fontenc}
+    % Scalable Latin Modern, which fontspec loads by default under the
+    % other two engines.
+    \usepackage{lmodern}
+    % Unlike the LaTeX template, this report keeps pdfLaTeX's error on a CJK
+    % character: a character dropped silently would go unnoticed in a
+    % submitted report. Use LuaLaTeX to render CJK text (Appendix B).
+\fi\fi
+
+% ============================================================================
+% Common packages (work with all compilers)
+% ============================================================================
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue!70!black,citecolor=green!50!black,urlcolor=blue!70!black]{hyperref}
+\usepackage{booktabs}
+% Additions for this report:
+\usepackage{microtype}  % Better line breaking
+\usepackage{csquotes}   % Quotation marks, which biblatex-apa expects
+\usepackage{siunitx}    % Numbers and units: \num, \qty, \unit
+\usepackage{listings}   % Code listings
+\lstset{basicstyle=\ttfamily\small, frame=single, columns=fullflexible,
+  breaklines=true}
+
+% ============================================================================
+% Bibliography backend — biblatex + biber, APA 7th edition (author-year)
+% ============================================================================
+% A student project has no .latexmkrc, which in a research project converts
+% references.bib for bibtex and so offers natbib + bibtex as an alternative.
+% Here bibtex would read references.bib directly and fail on its
+% BibLaTeX-format entries (@comment lines, journaltitle), so this report uses
+% biblatex only, and cites with its own \textcite and \parencite.
+%
+% annotation=false is not cosmetic. biblatex maps the legacy annote field
+% onto annotation (biblatex.def), and biblatex-apa — unlike the authoryear
+% and numeric styles — sets annotation=true by default (apa.bbx), so every
+% driver prints it. Our convention keeps author-private provenance in
+% annote ("Not downloaded", "cited in ADR-3007 for…"), which would then be
+% typeset into the reference list of every ordinary build; only
+% `make submission` strips those fields. Verified on TeX Live 2026.
+\usepackage[backend=biber,style=apa,natbib=true,
+            annotation=false]{biblatex}
+\addbibresource{references.bib}
+
+% Graphics path
+\graphicspath{{figures/}}
+
+% Hyperref setup
+\hypersetup{
+    pdftitle={How to Write a Technical Report},
+    pdfauthor={Firstname Familyname},
+}
+
+% cleveref must be loaded after hyperref (addition for this report).
+\usepackage[capitalise,noabbrev]{cleveref}
+
+% ISO date format (YYYY-MM-DD)
+\usepackage[style=iso]{datetime2}
+
+% ============================================================================
+% Document metadata
+% ============================================================================
+\title{How to Write a Technical Report:\\
+  \large An Example Using the Step Response of a First-Order System}
+\author{Firstname Familyname (Student ID A12345678) \\
+  \small Department, University, City, Country \\
+  \small Course name and code}
+\date{\today}
+
+% ============================================================================
+% Document content
+% ============================================================================
+\begin{document}
+
+\maketitle
+
+% ----------------------------------------------------------------------------
+\begin{abstract}
+The abstract summarizes the whole report in one paragraph of 150 to 250 words, so that a reader can decide whether to read on.
+State the problem and the objective, the method, the main quantitative results, and the conclusion, in that order.
+Write it last, cite no references in it, and use no abbreviations, figures, or tables.
+For example: We measured the step response of a first-order system to estimate its gain and time constant.
+A least-squares fit of the model to 11 samples gave a gain of \qty{2.00(2)}{\volt\per\volt} and a time constant of \qty{0.50(2)}{\second}.
+The model explains the measurements within the noise of the instrument, so a first-order model suffices for the controller design.
+\end{abstract}
+
+\noindent\textbf{Keywords:} technical report; report structure; \LaTeX; APA style
+
+\tableofcontents
+
+% ----------------------------------------------------------------------------
+\section{Introduction}
+\label{sec:introduction}
+
+The introduction tells the reader why the work matters and what the report does.
+Move from the general to the specific in four steps:
+\begin{enumerate}
+  \item the background and why the topic matters;
+  \item the problem or knowledge gap, supported by references;
+  \item the objective of this work, stated so that it can be tested;
+  \item the outline of the report.
+\end{enumerate}
+
+Support every claim that is not your own result with a citation.
+In APA style, cite the author in the sentence with \verb|\textcite|, as in \textcite{lamport1994LaTeXPreparationAddisonWesley}, who describes \LaTeX{}, or in parentheses with \verb|\parencite|, as in \parencite{knuth1984LiterateProgrammingComputJ}.
+Place each entry in \texttt{references.bib}, and let biber build the reference list;
+never type a reference by hand.
+
+Define every abbreviation at its first use, such as proportional--integral--derivative (PID), and use only the abbreviation afterwards.
+
+The objective of this report is to show the structure and conventions of a technical report.
+\Cref{sec:theory} gives the theory, \cref{sec:method} the method, \cref{sec:results} the results, \cref{sec:discussion} their discussion, and \cref{sec:conclusions} the conclusions.
+
+% ----------------------------------------------------------------------------
+\section{Theory}
+\label{sec:theory}
+
+The theory section gives the models and equations the method relies on, with references to their sources.
+Number every equation you refer to, end it with punctuation as part of the sentence, and define every symbol right after it.
+The step response of a first-order system is
+\begin{equation}
+  y(t) = K \left(1 - e^{-t/\tau}\right) u_0,
+  \label{eq:step-response}
+\end{equation}
+where $y$ is the output, $t$ the time, $K$ the static gain, $\tau$ the time constant, and $u_0$ the step amplitude.
+Refer to it as \cref{eq:step-response}.
+Write variables in italics, as $t$, and units and descriptive subscripts upright, as \unit{\second} and $t_\mathrm{rise}$.
+
+% ----------------------------------------------------------------------------
+\section{Method}
+\label{sec:method}
+
+The method section describes what you did in enough detail for another person to repeat it and obtain the same results.
+Write it in the past tense, and state the equipment, the materials, the procedure, and the data analysis.
+
+\subsection{Experimental setup}
+\label{sec:setup}
+
+List the equipment with manufacturer and model, and the settings with their values and units, preferably in a table such as \cref{tab:parameters}.
+Typeset every number with its unit through \verb|\qty|, as in \qty{0.25}{\second}, which keeps a thin space between them and the unit upright.
+Write uncertainties as \qty{0.50(2)}{\second} or \qty{0.50 \pm 0.02}{\second}.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Experimental settings.
+    Place the caption of a table above it, and use horizontal rules only.}
+  \label{tab:parameters}
+  \begin{tabular}{lS[table-format=2.2]l}
+    \toprule
+    Parameter & {Value} & {Unit} \\
+    \midrule
+    Step amplitude $u_0$ & 1.00 & \unit{\volt} \\
+    Sampling interval    & 0.25 & \unit{\second} \\
+    Number of samples    & 11   & -- \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{Data analysis}
+\label{sec:analysis}
+
+Describe how you processed the data and which software you used, with its version.
+Put the code in \texttt{scripts/} and the data in \texttt{data/}, and name the script that produces each result, so that every number and figure can be regenerated.
+Show a short and essential piece of code in a listing, as in \cref{lst:fit}, and the full code in an appendix or the repository.
+
+\begin{lstlisting}[language=Python, caption={Least-squares fit of the model in \cref{eq:step-response}.}, label={lst:fit}]
+from scipy.optimize import curve_fit
+popt, pcov = curve_fit(step_response, t, y)
+\end{lstlisting}
+
+% ----------------------------------------------------------------------------
+\section{Results}
+\label{sec:results}
+
+The results section presents what you found, without interpretation.
+Lead with the main result, give every number with its unit and uncertainty, and refer to every figure and table in the text before it appears.
+\Cref{fig:step-response} shows the measured step response together with the fitted model of \cref{eq:step-response}.
+The fit gave $K = \num{2.00(2)}$ and $\tau = \qty{0.50(2)}{\second}$.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics{figures/fig-step-response.pdf}
+  \caption{Measured step response and fitted first-order model.
+    Place the caption of a figure below it, and make it understandable without the text.
+    Label each axis with the quantity and its unit, and use a vector format such as PDF for plots.}
+  \label{fig:step-response}
+\end{figure}
+
+Keep each figure in the \texttt{figures/} subfolder of the report folder, and give it a descriptive name such as \texttt{fig-step-response.pdf}.
+Generate it with a script in \texttt{scripts/}, never by hand, at the size it is printed, so that its text matches the size of the body text.
+
+% ----------------------------------------------------------------------------
+\section{Discussion}
+\label{sec:discussion}
+
+The discussion interprets the results and answers the objective stated in the introduction.
+Explain what the results mean, compare them with theory and with earlier work, and state the limitations and the sources of error.
+For example, the measurements in \cref{fig:step-response} scatter around the model by at most \qty{0.05}{\volt}, which is within the resolution of the instrument, so the first-order model describes the system.
+Separate what the data show from what you infer, and do not repeat the results.
+
+% ----------------------------------------------------------------------------
+\section{Conclusions}
+\label{sec:conclusions}
+
+The conclusions state briefly what the work showed, in the order of the objectives, and introduce nothing new.
+Recommendations for future work, if any, follow them.
+For example: a first-order model with $K = \num{2.00(2)}$ and $\tau = \qty{0.50(2)}{\second}$ describes the system, so it can be used to design the controller.
+
+\section*{Acknowledgements}
+
+Thank the people and funders who contributed but are not authors.
+
+% ----------------------------------------------------------------------------
+\printbibliography
+
+% ----------------------------------------------------------------------------
+\appendix
+\section{Writing style}
+\label{app:style}
+
+Put material that supports the report but would interrupt it in appendices: derivations, raw data tables, and long code listings.
+The following conventions apply to the whole report:
+\begin{itemize}
+  \item Write in English, in short sentences, one idea per paragraph.
+  \item Use the past tense for what you did and found, and the present tense for established facts and for what the report shows.
+  \item Prefer the active voice, and use one term for one concept throughout.
+  \item Write numbers below ten in words in running text, except with units.
+  \item Use footnotes sparingly.\footnote{A footnote holds a side remark that would break the flow of the text.}
+  \item Use the same number of significant digits for a value and its uncertainty.
+\end{itemize}
+
+\section{Chinese text and fonts}
+\label{app:chinese}
+
+Write the report in English.
+When it must contain Chinese characters, such as the name of a person or the title of a source in Chinese, compile it with LuaLaTeX instead of pdflatex.
+The preamble detects the engine: pdflatex stops with an error at the first Chinese character, whereas LuaLaTeX loads the Noto CJK fonts through the \texttt{ctex} package, so Chinese text needs no further change.
+
+\paragraph{Install the fonts.}
+Install the Noto CJK fonts from Google, whose Traditional Chinese (TC) variants follow the standard character forms of the Taiwan Ministry of Education:
+\begin{lstlisting}[language=bash]
+# macOS, with Homebrew
+brew install --cask font-noto-serif-cjk-tc \
+  font-noto-sans-cjk-tc font-noto-sans-mono-cjk-tc
+# Ubuntu and Debian
+sudo apt install fonts-noto-cjk fonts-noto-cjk-extra
+# Check that LuaLaTeX finds the font
+luaotfload-tool --find="Noto Serif CJK TC"
+\end{lstlisting}
+On Windows, download Noto Serif TC and Noto Sans TC from \url{https://fonts.google.com/noto}, open each font file, and click \emph{Install}.
+These fonts are named \texttt{Noto Serif TC} and \texttt{Noto Sans TC}, so put those names in the three \verb|\setCJK...font| lines of the \verb|\ifluatex| branch of the preamble, with \texttt{Noto Sans TC} also as the monospaced font.
+
+\paragraph{Compile with LuaLaTeX.}
+At the top of the file, change the engine line to
+\begin{lstlisting}
+% !TEX program = lualatex
+\end{lstlisting}
+and replace \texttt{-pdf} with \texttt{-lualatex} in the \texttt{latexmk} command:
+\begin{lstlisting}[language=bash]
+latexmk -lualatex -cd \
+  -outdir=../../build/report_Smith2026_GaitAnalysis_A12345678 \
+  doc/report_Smith2026_GaitAnalysis_A12345678/main.tex
+\end{lstlisting}
+
+\end{document}

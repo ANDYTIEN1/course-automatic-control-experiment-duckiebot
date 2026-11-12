@@ -1,0 +1,7 @@
+# =============================================================================
+# Source: templates/gitignore/allow-gitignore-only.gitignore
+# Managed from the source file above.
+# Comment out rules here if needed, but do not add or delete lines in this block.
+# =============================================================================
+/*
+!/.gitignore
