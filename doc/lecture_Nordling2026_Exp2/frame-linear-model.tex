@@ -1,0 +1,40 @@
+% Copyright 2026 Torbjörn E. M. Nordling
+% SPDX-License-Identifier: Apache-2.0
+% frame-linear-model.tex — The model you know and its predictions (3:00–6:00)
+% Equations: article Eqs. (laws), (rotor), (armature), (tf1), (step), from
+% Franklin Ex. 2.15, Eqs. (2.60)-(2.70). Predictions P1-P3: article §2.1.
+\begin{frame}{The model you know}{Franklin's DC motor, with gearbox and PWM driver}
+  \footnotesize
+  \setlength{\abovedisplayskip}{2pt}\setlength{\belowdisplayskip}{2pt}
+  \begin{columns}[T]
+    \column{0.52\textwidth}
+    Torque and back emf: $T = K_t i_a$, $\;e = K_e\dot\theta_m$.
+    \begin{align*}
+      J_m\ddot\theta_m + b\,\dot\theta_m &= K_t i_a\\
+      L_a\,\tfrac{di_a}{dt} + R_a i_a &= v_a - K_e\dot\theta_m
+    \end{align*}
+    With $L_a = 0$, speed $\omega = \dot\theta_m$:
+    \[
+      \frac{\Omega(s)}{V_a(s)} = \frac{K}{\tau s + 1},\;
+      K = \tfrac{K_t}{bR_a + K_tK_e},\; \tau = \tfrac{R_aJ_m}{bR_a + K_tK_e}.
+    \]
+    Gearbox $N$: $\omega_w = \omega/N$. PWM: $v_a = V_s u$ on average.
+    A step of the duty from $u_0$ to $u_0 + \Delta u$ at $t = 0$:
+    \[
+      \omega_w(t) = \omega_w(0) + G\,\Delta u\,\big(1 - e^{-t/\tau}\big),
+    \]
+    with the gain $G = V_sK/N$.
+    \column{0.45\textwidth}
+    \begin{block}{\footnotesize Three predictions of a linear system}
+      \scriptsize
+      \begin{itemize}\setlength{\itemsep}{2pt}
+        \item[\textbf{P1}] Any nonzero step moves the wheel, and the steady speed is proportional to the duty, $\omega_w = Gu$.
+        \item[\textbf{P2}] $G$ and $\tau$ are the same for every step size and operating point (superposition).
+        \item[\textbf{P3}] A step down is the mirror image of the step up.
+      \end{itemize}
+    \end{block}
+    \vspace{3pt}
+    The naive plan: estimate $G$ and $\tau$ from one step, use them for all others.
+    \alert{Your experiment tests that plan.}
+  \end{columns}
+\end{frame}

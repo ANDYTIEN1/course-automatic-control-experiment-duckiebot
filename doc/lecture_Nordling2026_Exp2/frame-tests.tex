@@ -1,0 +1,28 @@
+% Copyright 2026 Torbjörn E. M. Nordling
+% SPDX-License-Identifier: Apache-2.0
+% frame-tests.tex — The two clips you record (6:00–7:00)
+% E1, E2: article §2.3 and Sam's guide §6.3 (quick version, about 4 min of
+% motor time). Full version (10 clips, tests A-D): Sam's guide §6.4.
+\begin{frame}{What you record}{Two clips, about 4 minutes of motor time}
+  \footnotesize
+  \begin{description}\setlength{\itemsep}{4pt}
+    \item[\textbf{E1, small duty}] After 2\,s at rest, raise the duty from 0.10 to 0.36 in steps of 0.02, 2\,s per level, lower it again to 0.10, then 0.
+      Run it forward and backward (negative duties).
+    \item[\textbf{E2, operating point}] After 2\,s at rest: $0 \to 0.6$ for 3\,s, $\to 1.0$ for 3\,s, $\to 0.6$ for 3\,s, $\to 0$ for 2\,s; three repetitions.
+  \end{description}
+  \vspace{4pt}
+  \begin{center}
+  \begin{tabular}{@{}lll@{}}
+    \toprule
+    Step & Clip & Tests \\
+    \midrule
+    0 to 0.2 & E1 & P1 \\
+    0 to 0.6 & E2 & the first-order fit \\
+    0.6 to 1.0 & E2 & P2 \\
+    up and down & E1, E2 & P3 \\
+    \bottomrule
+  \end{tabular}
+  \end{center}
+  \vspace{2pt}
+  {\scriptsize Groups that finish early may record the full set of tests A to D that Sam shows.}
+\end{frame}

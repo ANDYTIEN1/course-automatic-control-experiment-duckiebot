@@ -1,0 +1,32 @@
+% Copyright 2026 Torbjörn E. M. Nordling
+% SPDX-License-Identifier: Apache-2.0
+% frame-fifty-minutes.tex — Safety and the 50 minutes (21:00–22:00)
+% Safety and checklist: Sam's guide §4, §5.3, §6.1, §12. Minute split: lecturer's
+% suggestion, not from a source.
+\begin{frame}{Your 50 minutes}{Safety first, then two clips}
+  \footnotesize
+  \begin{columns}[T]
+    \column{0.47\textwidth}
+    \begin{alertblock}{\footnotesize Safety}
+      \scriptsize
+      \begin{itemize}\setlength{\itemsep}{1pt}
+        \item Keep a switch or plug within reach: software cannot stop a motor if the process dies.
+        \item Fingers, hair, and cables away from the wheels.
+        \item Stop the robot's own driver before a run, or two programs drive the motors.
+        \item Ctrl+C stops a run and switches the motors off.
+        \item Stop the run if the tape lifts at high duty.
+      \end{itemize}
+    \end{alertblock}
+    \column{0.5\textwidth}
+    \scriptsize
+    \begin{enumerate}\setlength{\itemsep}{1pt}
+      \item Choose roles: Pi operator, camera, note-taker, git.
+      \item Robot on its stand, tape on the wheel, LED in view.
+      \item Camera fixed, side-on, 240 frames/s; \alert{lock focus and exposure}.
+      \item Record a short test clip; check tape and LED are visible.
+      \item Record E1 and E2: start the video, wait 3\,s, run, wait for ``Done''.
+      \item Play each clip once on the phone; write down its name and the trial IDs.
+      \item Copy videos and Pi logs; start tracking.
+    \end{enumerate}
+  \end{columns}
+\end{frame}

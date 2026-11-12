@@ -1,0 +1,29 @@
+% Copyright 2026 Torbjörn E. M. Nordling
+% SPDX-License-Identifier: Apache-2.0
+% frame-video-sync.tex — Speed from video, synchronised by the LED (16:00–18:30)
+% Article §2.4 (Measurements): ellipse fit, +-23 ms quadratic window,
+% \OmegaSd, \TimingSd; frame interval 1/240 s = 4.2 ms (article §4).
+% Data README: sync levels; LED edges against logged times.
+\begin{frame}{Measuring the speed from video}{Two clocks, one LED}
+  \footnotesize
+  \begin{columns}[T]
+    \column{0.49\textwidth}
+    \textbf{Angle and speed}
+    \begin{enumerate}\setlength{\itemsep}{2pt}
+      \item A tracker finds the \alert{marker} and the \alert{hub} in every frame.
+      \item The marker moves on a circle that the camera sees as an \alert{ellipse}; an ellipse fit maps it back to a circle and gives the wheel angle.
+      \item Each frame is timed by its own timestamp: the phone drops frames.
+      \item Speed: slope of a quadratic fitted to the angle within $\pm 23$\,ms; typical $\sigma_\omega$ \OmegaSd\,rad/s.
+    \end{enumerate}
+    \column{0.48\textwidth}
+    \textbf{Synchronising video and command log}
+    \begin{enumerate}\setlength{\itemsep}{2pt}
+      \item The Pi switches the LED \alert{just before each command} and logs both times on its clock.
+      \item Find the LED's on and off edges in the video.
+      \item Fit a straight line: video time against Pi time gives \alert{offset and drift}.
+      \item Place every logged command on the video clock; timing uncertainty about \TimingSd\,ms.
+    \end{enumerate}
+    \vspace{2pt}
+    {\scriptsize At 240 frames/s, delays below one frame interval, 4.2\,ms, are not resolved.}
+  \end{columns}
+\end{frame}
