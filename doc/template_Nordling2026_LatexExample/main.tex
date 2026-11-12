@@ -134,7 +134,8 @@
 \title{How to Write a Technical Report:\\
   \large An Example Using the Step Response of a First-Order System}
 % One report per group: list every group member, each with their student ID,
-% separated by \and, in the order the group agrees on. Write each name as
+% separated by \and, in order of falling contribution, and describe each
+% member's contribution in the Contributions section. Write each name as
 % Firstname Familyname, in ASCII or in the person's own script (LuaLaTeX).
 \author{%
   Ann Andersson\\ \small Student ID A12345678
@@ -290,6 +291,35 @@ For example: a first-order model with $K = \num{2.00(2)}$ and $\tau = \qty{0.50(
 \section*{Acknowledgements}
 
 Thank the people and funders who contributed but are not authors.
+
+% ----------------------------------------------------------------------------
+\section*{Contributions}
+\label{sec:contributions}
+
+List the authors under the title in order of falling contribution: the member who contributed most comes first.
+Describe here what every member contributed, using the roles of the Contributor Roles Taxonomy (CRediT), the standard ANSI/NISO Z39.104-2022 (\url{https://credit.niso.org/}).
+Name for each member every role they had, and add \emph{lead}, \emph{equal}, or \emph{supporting} when several members share a role.
+The roles that fit a laboratory report are:
+\begin{description}
+  \item[Conceptualization] ideas and the aims of the work.
+  \item[Methodology] design of the experiment and of the analysis.
+  \item[Software] writing, adapting, and testing the code.
+  \item[Investigation] carrying out the experiment and recording the data.
+  \item[Data curation] organising, documenting, and committing the data.
+  \item[Formal analysis] the statistical or mathematical analysis of the data.
+  \item[Validation] checking that the results are reproducible.
+  \item[Visualization] the figures and tables.
+  \item[Writing -- original draft] writing the first version of the text.
+  \item[Writing -- review \& editing] revising the text and commenting on it.
+  \item[Project administration] planning and coordinating the work.
+\end{description}
+CRediT has three further roles, Funding acquisition, Resources, and Supervision, which rarely apply to a student group.
+For example:
+\begin{itemize}
+  \item Ann Andersson: Investigation (lead), Software, Formal analysis, Writing -- original draft.
+  \item Bo-Wei Chen: Investigation (supporting), Data curation, Visualization, Writing -- review \& editing.
+  \item Carlos Garcia: Methodology, Validation, Project administration, Writing -- review \& editing.
+\end{itemize}
 
 % ----------------------------------------------------------------------------
 \printbibliography
