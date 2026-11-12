@@ -6,8 +6,9 @@
 % further SPDX-FileCopyrightText line per co-author as they join.
 %
 % Example technical report. Copy this folder to
-% doc/report_FamilynameYEAR_TwoTitleWords_<StudentID>/, replace the text, and
-% keep the structure. Compile it from the repository root, so that every
+% doc/report_FamilynameYEAR_TwoTitleWords_Group<NN>/, where Familyname is the
+% family name of the first author and <NN> the two-digit group number,
+% replace the text, and keep the structure. Compile it from the repository root, so that every
 % build artefact lands in build/:
 %
 %   latexmk -pdf -cd \
@@ -118,7 +119,7 @@
 % Hyperref setup
 \hypersetup{
     pdftitle={How to Write a Technical Report},
-    pdfauthor={Firstname Familyname},
+    pdfauthor={Ann Andersson, Bo-Wei Chen, Carlos Garcia},
 }
 
 % cleveref must be loaded after hyperref (addition for this report).
@@ -132,10 +133,20 @@
 % ============================================================================
 \title{How to Write a Technical Report:\\
   \large An Example Using the Step Response of a First-Order System}
-\author{Firstname Familyname (Student ID A12345678) \\
-  \small Department, University, City, Country \\
-  \small Course name and code}
-\date{\today}
+% One report per group: list every group member, each with their student ID,
+% separated by \and, in the order the group agrees on. Write each name as
+% Firstname Familyname, in ASCII or in the person's own script (LuaLaTeX).
+\author{%
+  Ann Andersson\\ \small Student ID A12345678
+  \and
+  Bo-Wei Chen\\ \small Student ID A23456789
+  \and
+  Carlos Garcia\\ \small Student ID A34567890}
+% The shared group, affiliation, and course line goes in \date, below all the
+% authors; inside \author it would attach to the last name only.
+\date{\small Group 03, Department, University, City, Country \\
+  \small Course name and code \\[1ex]
+  \today}
 
 % ============================================================================
 % Document content
@@ -328,8 +339,8 @@ At the top of the file, change the engine line to
 and replace \texttt{-pdf} with \texttt{-lualatex} in the \texttt{latexmk} command:
 \begin{lstlisting}[language=bash]
 latexmk -lualatex -cd \
-  -outdir=../../build/report_Smith2026_GaitAnalysis_A12345678 \
-  doc/report_Smith2026_GaitAnalysis_A12345678/main.tex
+  -outdir=../../build/report_Andersson2026_WheelDynamics_Group03 \
+  doc/report_Andersson2026_WheelDynamics_Group03/main.tex
 \end{lstlisting}
 
 \end{document}
