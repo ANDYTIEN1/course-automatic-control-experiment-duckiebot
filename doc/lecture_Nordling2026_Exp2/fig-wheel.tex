@@ -1,0 +1,130 @@
+% Schematic of the wheel as the camera sees it, with the quantities of S2-S5
+% that can be seen in it. Input by supplementary.tex; the geometry is
+% exaggerated for legibility and is not a measurement.
+\begin{tikzpicture}[
+    font=\footnotesize,
+    >={Stealth[length=1.6mm]},
+    lbl/.style={inner sep=1pt},
+    cov/.style={draw=black!70, thin},
+    brace/.style={decorate, decoration={brace, amplitude=3pt}, thin},
+  ]
+  % Wheel as seen: semi-axes 2.275 and 1.43, tilted 15 deg. The proportions below
+  % were measured on a video frame, as fractions of the outer radius of the tyre: the strip runs
+  % from the axis to 0.92 and is 0.3 wide, its centroid lies at 0.52, the hub disk
+  % has radius 0.54, and the tape hides hub pixels, which puts h_i 0.09 behind
+  % the axis.
+  \def\Ra{2.275}
+  \def\Rb{1.43}
+  \def\ra{1.18}
+  \def\rb{0.74}
+  \def\strip{60}
+  % ---------------------------------------------------------------- (a)
+  \begin{scope}
+    \draw[black!50] (-2.9,-2.7) rectangle (2.9,2.1);
+    \node[anchor=north west, lbl] at (-2.9,2.1) {(a) Video frame $i$};
+    % LED of the stand, seen in the frame (S5).
+    \fill[orange!80] (2.45,1.65) circle (0.12);
+    \node[lbl, left] at (2.3,1.65) {LED};
+    \begin{scope}[rotate=15]
+      \fill[black!8] (0,0) ellipse ({\Ra} and {\Rb});
+      \draw[black!40] (0,0) ellipse ({\Ra} and {\Rb});
+      % Yellow wheel inside the hub disk: the hub pixels, less those under the tape.
+      \fill[black!24] (0,0) ellipse ({0.54*\Ra} and {0.54*\Rb});
+      % Fitted ellipse of the marker track, centre c (offset exaggerated).
+      \draw[dashed, black!60] (-0.34,0.18) ellipse ({\ra} and {\rb});
+      % Marker pixels of frame i: all of the tape, inner part included (S3).
+      % Coordinates in this scope: x along the strip, y across it, in tyre radii.
+      \begin{scope}[cm={\Ra*cos(\strip),\Rb*sin(\strip),-\Ra*sin(\strip),\Rb*cos(\strip),(0,0)}]
+        \fill[blue!55, opacity=0.85] (0,-0.15) rectangle (0.92,0.15);
+        \coordinate (m) at (0.52,0);
+        \coordinate (h) at (-0.09,0);
+        \draw[cov] (m) ellipse (0.13 and 0.05);
+        \draw[cov, dashed] (m) ellipse (0.21 and 0.08);
+        \draw[cov] (h) ellipse (0.07 and 0.07);
+      \end{scope}
+      \draw (-0.34,0.18) ++(-0.07,-0.07) -- ++(0.14,0.14) ++(0,-0.14) -- ++(-0.14,0.14);
+      \node[lbl, below right] at (-0.62,0.6) {$\mathbf c$};
+      % Marker centroids of the other frames l of the speed window (S4).
+      \foreach \d in {-30,-24,-18,-12,-6,6,12,18,24,30}
+        \fill[black!70] ({-0.34+\ra*cos(38+\d)},{0.18+\rb*sin(38+\d)}) circle (0.03);
+      \coordinate (ml) at ({-0.34+\ra*cos(68)},{0.18+\rb*sin(68)});
+      \fill (h) circle (0.035);
+      \fill (m) circle (0.035);
+      \draw[->, thick] (h) -- (m);
+    \end{scope}
+    \draw[thin, black!60] (ml) -- (-0.95,1.32) node[lbl, anchor=south east, text=black] {$\mathbf m_l$, $|t_l - t_i| \le w$};
+    \node[lbl] at ($(h)+(-0.72,-0.14)$) {$\mathbf h_i, \boldsymbol\Sigma_{h,i}$};
+    \draw[thin, black!60] ($(h)!0.5!(m)$) -- (0.33,-0.05) node[lbl, right, text=black] {$\mathbf r_i$};
+    \draw[thin, black!60] (m) -- ++(-0.72,0.52) node[lbl, above, text=black] {$\mathbf m_i$};
+    \node[lbl, anchor=south west, align=left] at (-2.85,-2.65)
+      {$\mathbf m_i$: centroid of the $n_i$ marker pixels (blue),\\ $\boldsymbol\Sigma_{m,i} = k^2 \mathbf C_i / n_i$ (dashed: $k > 1$)};
+  \end{scope}
+  % ------------------------------------------------- (b) after the map A
+  \begin{scope}[xshift=7.4cm]
+    \node[anchor=north west, lbl] at (-2.9,2.1) {(b) $\mathbf q_i = \mathbf A(\mathbf r_i - \mathbf c)$};
+    \draw[->, black!50] (-2.1,0) -- (2.3,0) node[below left, lbl] {$q_x$};
+    \draw[->, black!50] (0,-1.9) -- (0,1.8) node[left, lbl] {$q_y$};
+    \draw[dashed, black!60] (0,0) circle (1.6);
+    % Corrected angles of the window frames.
+    \foreach \d in {-30,-24,-18,-12,-6,6,12,18,24,30}
+      \fill[black!70] ({1.6*cos(38+\d)},{1.6*sin(38+\d)}) circle (0.03);
+    \draw[thin, black!60] (14:1.65) -- (14:2.05);
+    \node[lbl, anchor=west, align=left] at (14:2.05) {$\theta^c_l$, $|t_l - t_i| \le w$\\ (blue: $\theta^c_i$)};
+    \draw[->, thick, blue!60!black] (-60:1.95) arc (-60:-25:1.95);
+    \node[lbl, right] at (-45:1.98) {$\omega_i = \beta_1$};
+    % Measured angle of frame i and its corrected value.
+    \coordinate (q) at (45:1.6);
+    \coordinate (qc) at (38:1.6);
+    \draw[->, thick] (0,0) -- (q);
+    \draw[thin] (0,0) -- (qc);
+    \fill (q) circle (0.035);
+    \fill[blue!60!black] (qc) circle (0.035);
+    \node[lbl] at (55:1.3) {$\mathbf q_i$};
+    \draw[->] (0.45,0) arc (0:45:0.45);
+    \node[lbl] at (14:0.72) {$\theta_i$};
+    \draw (45:1.2) arc (45:38:1.2);
+    \node[lbl, anchor=north west] at (36:1.1) {$h(\theta_i)$};
+    % Propagated covariance and the gradient along the tangent (S2).
+    \draw[cov, rotate around={10:(q)}] (q) ellipse (0.22 and 0.12);
+    \draw[->, thick, black!75] (q) -- ++(135:0.5) node[above, lbl] {$\mathbf g_i$};
+    \draw[black!75] ($(q)+(135:0.2)+(45:0.08)$) -- ++(225:0.16);
+    \draw[black!75] ($(q)+(-45:0.2)+(45:0.08)$) -- ++(225:0.16);
+    \node[lbl, anchor=west] at ($(q)+(0.28,0.22)$) {$\pm\sigma_{\theta,i}$};
+    \node[lbl, anchor=south west] at (-2.85,-2.65) {$\mathbf A \boldsymbol\Sigma_{r,i} \mathbf A^{\mathsf T}$ at $\mathbf q_i$, $\sigma^2_{\theta,i} = \mathbf g_i \boldsymbol\Sigma_{r,i} \mathbf g_i^{\mathsf T}$};
+  \end{scope}
+  % ---------------------------------------------------- (c) the two clocks
+  \begin{scope}[yshift=-4.2cm]
+    \node[anchor=north west, lbl] at (-2.9,1.25) {(c) Clocks (S5)};
+    \draw[->, black!50] (-1.2,0.6) -- (10.2,0.6) node[right, lbl] {Pi, $\tau$};
+    \draw[->, black!50] (-1.2,-0.6) -- (10.2,-0.6) node[right, lbl] {video, $t$};
+    % LED call on the Pi.
+    \draw[line width=2.5pt, orange!70] (1.4,0.6) -- (2.9,0.6);
+    \draw (1.4,0.5) -- (1.4,0.7) node[above, lbl] {$\tau_k$};
+    \draw (2.9,0.5) -- (2.9,0.7) node[above, lbl] {$\tau'_k$};
+    \fill (2.15,0.6) circle (0.05);
+    \node[lbl, above] at (2.15,0.7) {$\bar\tau_k$};
+    \node[lbl, above] at (0.3,0.65) {LED call};
+    % Video frames: LED off, a dropped frame, LED on.
+    \foreach \x in {-0.5,0.0,0.5,1.0,1.5}
+      \draw[fill=white] (\x-0.08,-0.68) rectangle (\x+0.08,-0.52);
+    \draw[black!40, densely dotted] (2.42,-0.68) rectangle (2.58,-0.52);
+    \foreach \x in {3.0,3.5,4.0,4.5}
+      \draw[fill=orange!80] (\x-0.08,-0.68) rectangle (\x+0.08,-0.52);
+    \draw[brace] (1.5,-0.42) -- (3.0,-0.42) node[midway, above=2pt, xshift=-0.4cm, lbl] {$\Delta t_k$};
+    \draw[brace, decoration={mirror}] (-0.5,-0.78) -- (0.0,-0.78) node[midway, below=2pt, lbl] {$\Delta t$};
+    \fill (2.25,-0.6) circle (0.05);
+    \draw (1.82,-0.85) -- (2.68,-0.85);
+    \draw (1.82,-0.92) -- (1.82,-0.78);
+    \draw (2.68,-0.92) -- (2.68,-0.78);
+    \node[lbl, below] at (2.25,-0.9) {$t_k \pm \Delta t_k/\sqrt{12}$};
+    \draw[->, dashed] (2.15,0.45) -- (2.25,-0.45);
+    \node[lbl, anchor=west, align=left] at (3.2,0.05) {$t_k = a + (1 + \delta)\,\bar\tau_k$,\\ residual $e_k$, uncertainty $s_k$};
+    % Motor command placed on the video clock.
+    \draw[line width=2.5pt, blue!50] (7.6,0.6) -- (8.4,0.6);
+    \fill (8.0,0.6) circle (0.05);
+    \node[lbl, above] at (8.0,0.7) {motor call, $\bar\tau$};
+    \draw[->, dashed] (8.0,0.5) -- (8.1,-0.5);
+    \draw (8.1,-0.68) -- (8.1,-0.52);
+    \node[lbl, below] at (8.1,-0.7) {step, $t = 0$};
+  \end{scope}
+\end{tikzpicture}

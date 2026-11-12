@@ -1,45 +1,41 @@
 % Copyright 2026 Torbjörn E. M. Nordling
 % SPDX-License-Identifier: Apache-2.0
-% frame-git.tex — Git for the group repository (22:00–23:30)
-% Beginner level (user request 2026-11-12: students do not know git). One
-% member creates the group's copy of the course student repository and adds the
-% others as collaborators. Commands are standard git; nothing repository-specific.
-\begin{frame}[fragile]{Git: share your work through one group repository}{One member creates it and adds the others as collaborators}
+% frame-git.tex — Hand-in by pull request, step 1: the data (22:30–23:30)
+% Beginner level (students do not know git). Hand-in rule (user, 2026-11-12):
+% one member forks the student-material repository on GitHub and adds the
+% others as collaborators on the fork; PR 1 holds the data folder(s), a TA must
+% approve it before the report PR. Remote upstream, PR target, and branch names
+% as in the student README (coordinator, 2026-11-12).
+\begin{frame}[fragile]{Hand in by pull request (1/2): your data}{One member forks the repository on GitHub and adds the others as collaborators}
   \scriptsize
+  Course URL: \texttt{https://github.com/nordlinglab/course-automatic-control-experiment-duckiebot.git}
   \begin{columns}[T]
-    \column{0.58\textwidth}
+    \column{0.53\textwidth}
 \begin{verbatim}
-git clone <URL of your group repository>
+git clone <URL of your fork>
 cd <repository folder>
+git remote add upstream <course URL>
+git switch -c group03-data
+cd data/raw/db17-r5-left-m9
+git add setup.toml runs.csv trials.csv
+git add quality.md frames/*.parquet pi/*
+git commit -m "Add E1 and E2 of motor m9"
+git push -u origin group03-data
 git pull
-git status
-git add data/raw/db17-r5-left-m9/pi/<log>
-git commit -m "Add Pi logs of E2, motor m9"
-git push
 \end{verbatim}
     \vspace{-6pt}
+    Then open the \alert{pull request} on GitHub, from your branch to \texttt{main} of the course repository.
+    \column{0.44\textwidth}
     \begin{itemize}\setlength{\itemsep}{0pt}
-      \item \texttt{clone}: copy the repository to your PC, once.
-      \item \texttt{pull}: fetch the group's latest work; \alert{always before you start}.
-      \item \texttt{status}: list what you changed.
-      \item \texttt{add}: choose the files to save, \alert{each by name}.
-      \item \texttt{commit}: save them with a message that says what and why.
-      \item \texttt{push}: send your commits to the group.
+      \item \texttt{clone}: copy your fork to your PC, once.
+      \item \texttt{remote add}: name the course repository \texttt{upstream}, once.
+      \item \texttt{switch -c}: start a branch for this hand-in.
+      \item \texttt{add}: choose what to save, \alert{each by name}.
+      \item \texttt{commit}: save it with a message that says what.
+      \item \texttt{push}: send the branch to your fork.
+      \item \texttt{pull}: later, get your members' commits.
     \end{itemize}
-    \column{0.39\textwidth}
-    \textbf{Where things go}
-    \begin{itemize}\setlength{\itemsep}{0pt}
-      \item data: \texttt{data/raw/}
-      \item code: \texttt{scripts/}
-      \item report: its own folder in \texttt{doc/}
-    \end{itemize}
-    \textbf{Push refused?} Someone pushed first: run \texttt{git pull}, fix any lines marked \texttt{<<<<<<<}, \texttt{add}, \texttt{commit}, \texttt{push}.
-
     \vspace{2pt}
-    \begin{alertblock}{\scriptsize Never commit}
-      \scriptsize
-      videos; \texttt{build/}; \texttt{.venv/}; \texttt{data/interim/}, \texttt{data/processed/}.
-      Never \texttt{git add .}
-    \end{alertblock}
+    \textbf{PR 1 holds} only your data folder(s), organised as on the data slide. A \alert{TA must approve it} before your report PR.
   \end{columns}
 \end{frame}

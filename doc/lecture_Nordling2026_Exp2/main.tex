@@ -11,7 +11,8 @@
 %
 % SESSION (100 min): this lecture 25 min; demonstration by co-author Sam
 % (Samruddhi Patil) 25 min; groups run the experiment 50 min. 8 Duckiebots
-% (R1 to R8), 8 groups, one report per group.
+% (R1 to R8), 8 groups, one report per group. Hand-in by two pull requests
+% from the group's fork: data (TA-approved first), then report, due 2026-11-26.
 %
 % AUDIENCE — as in ../../../doc/syllabus_AutomaticControl/README.md § Audience
 % (parent course project). Builds on the course's own lectures
@@ -36,7 +37,9 @@
 %
 % FIGURES — figures/fig-*.pdf copied unchanged from the article's generated
 % results/figures/case_study_csme2026/; figures/photo-db17-wheel-video-frame.png
-% from the repository's assets/image/ (article Fig. 1).
+% from the repository's assets/image/ (article Fig. 1). From the supplementary,
+% unchanged: figures/fig-methods.pdf, fig-wheel-overlay.pdf, fig-rest-noise.pdf,
+% and the TikZ source fig-wheel.tex.
 %
 % THEME — NordlingLab169 is not installed in the TeX tree on this machine; build
 % with the theme folder of the parent course project on TEXINPUTS, from the
@@ -49,9 +52,9 @@
 %   The model      3-6   linear model and its three predictions P1-P3
 %   The four steps 6-14  dead zone, step to 0.6, step 0.6->1.0, hysteresis
 %   Comparing      14-16 model candidates and step quantities
-%   Measuring      16-20 video + LED sync, pipeline from video to figure
-%   Doing it       20-22 data naming; the 50 minutes and safety
-%   Hand in        22-25 git for the group; the group report
+%   Measuring      16-21 wheel angle, speed and LED clock, pipeline, data checks
+%   Doing it       21-22.5 data naming; the 50 minutes and safety
+%   Hand in        22.5-25 pull request 1 (data), pull request 2 (report); the group report
 % STOP POINT — if time runs out, frame-compare-models and frame-pipeline become
 % hand-outs; git and report are always spoken (user request: last two frames).
 
@@ -65,7 +68,7 @@
 \usepackage{graphicx}
 \graphicspath{{./}{figures/}}
 \usepackage{tikz}
-\usetikzlibrary{positioning, arrows.meta}
+\usetikzlibrary{positioning, arrows.meta, calc, decorations.pathreplacing}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{booktabs}
@@ -130,8 +133,10 @@
 
 % =============== Measuring (16-20 min) ===============
 \section{Measuring}
+\input{frame-wheel-angle.tex}
 \input{frame-video-sync.tex}
 \input{frame-pipeline.tex}
+\input{frame-tracking-quality.tex}
 
 % =============== Doing it (20-22 min) ===============
 \section{Doing it}
@@ -141,6 +146,7 @@
 % =============== Hand in (22-25 min) ===============
 \section{Hand in}
 \input{frame-git.tex}
+\input{frame-git-report.tex}
 \input{frame-report.tex}
 
 \end{document}
