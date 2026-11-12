@@ -1,0 +1,369 @@
+% The Nordling Lab Presentation theme created by Victor Osorio and Torbjörn Nordling, implemented using Beamer by Jose Chang and Torbjörn Nordling.
+% Copyright 2017 by Nordling Lab, Nordron AB
+
+%Outer Themes
+%"An outer theme specifes what the “outside” or “border” of the presentation slides should look like. It specifies whether there are head- and footlines, what is shown in them, whether there is a sidebar, where the logo goes, where the navigation symbols and bars go, and so on. It also specifies where the frametitle is put and how it is typeset." Beamer User Guide sec. 15.1
+
+%Typically, an outer theme specifies how the following elements are rendered:
+%∙ The head- and footline.
+%∙ The sidebars.
+%∙ The logo.
+%∙ The frame title.
+
+% The size of a Beamer slide is 128mm by 96mm, while a PPT slide (4:3) is 254mm by 190.5mm, so the beamer elements should be 0.5039 of the PPT elements.
+
+% Requirement
+\pgfdeclareimage[height=1.3cm]{NCKU}{figures/NCKUlogo.pdf}
+\pgfdeclareimage[height=1.5cm]{NL}{figures/NordlingLablogo.pdf}
+\pgfdeclareimage[height=1.25cm]{ME}{figures/NCKUMElogo.pdf}
+\pgfdeclareimage[height=0.45cm]{CC}{figures/CClogo.pdf}
+\pgfdeclareimage[height=8.4cm]{Banner}{figures/NordlingLabbanner169.pdf}
+\pgfdeclareimage[height=8.4cm]{BannerTN}{figures/NordlingLabTNbanner169.pdf}
+
+\tikzset{help lines/.style={color=red!50,very thin}} %Sets the color of the help lines in the grid so they are visible
+%\tikzset{help lines/.style={color=white,very thin}} %Sets the color of the help lines in the grid to the background color
+
+\mode<presentation>
+
+
+% Background templates
+\defbeamertemplate*{background}{NLTitle}[1][]{% Background for title page
+  %\hspace{-5mm} %The small white stripe on the left side cannot be removed. It is probably a rendering error
+  \begin{tikzpicture}
+  	\useasboundingbox (0,0) rectangle(\the\paperwidth,\the\paperheight);
+%	\draw[help lines] (0,0) grid (\the\paperwidth,\the\paperheight); %Turn on a grid with 1x1cm squares to make placement easier
+%  	\draw[color=green] (\the\paperwidth/2,0) -- (\the\paperwidth/2,\the\paperheight); %Draws vertical line in the middle of the slide
+%  	\draw[color=yellow] (0,\the\paperheight/2) -- (\the\paperwidth,\the\paperheight/2); %Draws horizontal line in the middle of the slide
+ 	\fill[color=NLdarkblue] (\the\paperwidth/2,-0.7) ellipse (4.1cm and 1.59cm);%Ellipse in the footline of title slide
+	%Banner of title slide
+ 	\fill[color=NLlightblue] (0,\the\paperheight) rectangle(\the\paperwidth,8.6);
+ 	\fill[color=NLmiddleblue] (0,\the\paperheight) rectangle(10.67,8.6);
+ 	\fill[color=NLdarkblue] (0,\the\paperheight) rectangle(5.34,8.6);
+	%Logos
+  	\pgftext[at=\pgfpoint{2.75cm}{0.4cm},left,base]{\pgfuseimage{NCKU}}
+  	\pgftext[at=\pgfpoint{\the\paperwidth/2}{1.0cm},base]{\pgfuseimage{NL}}
+  	\pgftext[at=\pgfpoint{\the\paperwidth-2.58cm}{0.4cm},right,base]{\pgfuseimage{ME}}
+  \end{tikzpicture}
+}
+
+\defbeamertemplate*{background}{NLonlyTitle}[1][]{% Title page background without NCKU and ME logos
+  \begin{tikzpicture}
+  	\useasboundingbox (0,0) rectangle(\the\paperwidth,\the\paperheight);
+ 	\fill[color=NLdarkblue] (\the\paperwidth/2,-0.7) ellipse (4.1cm and 1.59cm);%Ellipse in the footline of title slide
+	%Banner of title slide
+ 	\fill[color=NLlightblue] (0,\the\paperheight) rectangle(\the\paperwidth,8.6);
+ 	\fill[color=NLmiddleblue] (0,\the\paperheight) rectangle(10.67,8.6);
+ 	\fill[color=NLdarkblue] (0,\the\paperheight) rectangle(5.34,8.6);
+	%Logo (NCKU and ME logos intentionally omitted)
+  	\pgftext[at=\pgfpoint{\the\paperwidth/2}{1.0cm},base]{\pgfuseimage{NL}}
+  \end{tikzpicture}
+}
+
+\defbeamertemplate*{background}{NL}[1][]{% Background for slide without CC
+  \begin{tikzpicture}
+  	\useasboundingbox (0,0) rectangle(\the\paperwidth,\the\paperheight);
+ 	\fill[color=NLdarkblue] (\the\paperwidth/2,-0.89cm) ellipse (4.1cm and 1.59cm);%Ellipse in the footline of normal slides
+%Banner
+  	\pgftext[at=\pgfpoint{\the\paperwidth/15}{\the\paperheight-0.31cm},top]{\pgfuseimage{Banner}}
+  \end{tikzpicture}
+}
+
+\defbeamertemplate*{background}{NLCC}[1][]{% Background for slide with CC
+  %\hspace{-5mm} %The small white stripe on the left side cannot be removed. It is probably a rendering error
+  \begin{tikzpicture}
+  	\useasboundingbox (0,0) rectangle(\the\paperwidth,\the\paperheight);
+ 	\fill[color=NLdarkblue] (\the\paperwidth/2,-0.89cm) ellipse (4.1cm and 1.59cm);%Ellipse in the footline of normal slides
+	%Banner
+  	\pgftext[at=\pgfpoint{\the\paperwidth/15}{\the\paperheight-0.31cm},top]{\pgfuseimage{Banner}}
+	%CC logo
+  	\pgftext[at=\pgfpoint{2.5cm}{0.06cm},left,base]{\pgfuseimage{CC}}
+  \end{tikzpicture}
+}
+
+\defbeamertemplate*{background}{NLTN}[1][]{% Background for slide without CC, alternative TN banner
+  \begin{tikzpicture}
+  	\useasboundingbox (0,0) rectangle(\the\paperwidth,\the\paperheight);
+ 	\fill[color=NLdarkblue] (\the\paperwidth/2,-0.89cm) ellipse (4.1cm and 1.59cm);%Ellipse in the footline of normal slides
+%Banner
+  	\pgftext[at=\pgfpoint{\the\paperwidth/15}{\the\paperheight-0.31cm},top]{\pgfuseimage{BannerTN}}
+  \end{tikzpicture}
+}
+
+\defbeamertemplate*{background}{NLTNCC}[1][]{% Background for slide with CC, alternative TN banner
+  \begin{tikzpicture}
+  	\useasboundingbox (0,0) rectangle(\the\paperwidth,\the\paperheight);
+ 	\fill[color=NLdarkblue] (\the\paperwidth/2,-0.89cm) ellipse (4.1cm and 1.59cm);%Ellipse in the footline of normal slides
+	%Banner
+  	\pgftext[at=\pgfpoint{\the\paperwidth/15}{\the\paperheight-0.31cm},top]{\pgfuseimage{BannerTN}}
+	%CC logo
+  	\pgftext[at=\pgfpoint{2.5cm}{0.06cm},left,base]{\pgfuseimage{CC}}
+  \end{tikzpicture}
+}
+
+
+% Title page
+\defbeamertemplate*{title page}{NLTitle}{
+  \vspace{-0.35cm}%
+  %\vspace{-0.98cm}%
+  \ifx\inserttitle\@empty\par
+  \else{%
+  %wd=\paperwidth-2\beamer@leftsidebar makes the box symmetric about
+  %\paperwidth/2 (slide's geometric centre): with the template's natural
+  %origin at slide-x = \beamer@leftsidebar, a width of
+  %\paperwidth-2\beamer@leftsidebar puts the box's centre exactly on
+  %\paperwidth/2. Centred content therefore lands on the slide centre
+  %without touching the sidebar or the background canvas.
+  \begin{beamercolorbox}[wd=\dimexpr\paperwidth-2\beamer@leftsidebar\relax,ht=1.98cm,dp=1ex,sep=0cm,center]{titlelike}
+	\spaceskip=3pt
+  	{\usebeamerfont{title}\par\inserttitle\par}
+  \end{beamercolorbox}%
+  }%
+  \fi
+  %Match the symmetric width for the subtitle/author/institute centring
+  %environment so each of those lines also centres on the slide centre.
+  \hsize=\dimexpr\paperwidth-2\beamer@leftsidebar\relax\linewidth=\hsize%
+  \begin{centering}
+  \vspace{0.25cm}
+  \spaceskip=0pt
+  \ifx\insertsubtitle\@empty\par
+  \else{\par\usebeamercolor[fg]{title page title}\usebeamerfont{subtitle}\insertsubtitle\par}
+  \fi
+  \ifx\insertauthor\@empty\par
+  \else{\par\usebeamercolor[fg]{normal text}\usebeamerfont{author}\insertauthor\par}
+  \fi
+  \ifx\insertinstitute\@empty\par
+  \else{\par\usebeamercolor[fg]{normal text}\usebeamerfont{institute}\insertinstitute\par}
+  \fi
+  \ifx\insertdate\@empty\par
+ % \else{\vspace{-0.1cm}\par\usebeamercolor[fg]{normal text}\usebeamerfont{date}\insertdate\par}
+  \fi
+  \end{centering}
+  \vfill
+}
+
+% Frame title
+%
+% Content-independent vertical positioning: the title and subtitle are
+% placed via TikZ overlay at absolute slide coordinates measured from
+% (current page.north west). The frametitle template itself emits only a
+% fixed-height \vbox that reserves the right amount of body space; the
+% template's own output is the same height regardless of frame mode
+% ([t]/[c]/[fragile]) or body content, so no vertical glue can be
+% discarded.
+\defbeamertemplate*{frametitle}{NL}[1][]{%frametitle for slide with/without CC
+  \ifx\insertframetitle\@empty
+    % No title: still reserve a small top margin so body doesn't crash
+    % into the top edge.
+    \vbox to0.4cm{}%
+  \else
+    \setbox\@tempboxa=\vbox{%
+      \hsize=\dimexpr\paperwidth-\beamer@leftsidebar\relax
+      \usebeamerfont{frametitle}\noindent\insertframetitle\par
+    }%
+    \begin{tikzpicture}[remember picture,overlay]
+      \ifdim\ht\@tempboxa>0.7cm
+        % Multi-line title: anchor first line ~0.2 cm from slide top
+        % (half a cap height above the single-line anchor).
+        \node[anchor=north west,inner sep=0pt,
+              text width=\dimexpr\paperwidth-\beamer@leftsidebar-0.3cm\relax,
+              align=left]
+          at ([xshift=\beamer@leftsidebar,yshift=-0.2cm]current page.north west)
+          {\usebeamercolor[fg]{frametitle}\usebeamerfont{frametitle}\insertframetitle};
+      \else
+        \ifx\insertframesubtitle\@empty
+          % Single line, no subtitle: cap top at logo top (~0.4 cm).
+          \node[anchor=north west,inner sep=0pt,
+                text width=\dimexpr\paperwidth-\beamer@leftsidebar-0.3cm\relax,
+                align=left]
+            at ([xshift=\beamer@leftsidebar,yshift=-3mm]current page.north west)
+            {\usebeamercolor[fg]{frametitle}\usebeamerfont{frametitle}\insertframetitle};
+        \else
+          % Single line with subtitle: lift title to ~0.2 cm; subtitle
+          % anchored ~0.85 cm from slide top so the gap is ~half a
+          % subtitle-line tall.
+          \node[anchor=north west,inner sep=0pt,
+                text width=\dimexpr\paperwidth-\beamer@leftsidebar-0.3cm\relax,
+                align=left]
+            at ([xshift=\beamer@leftsidebar,yshift=-0.2cm]current page.north west)
+            {\usebeamercolor[fg]{frametitle}\usebeamerfont{frametitle}\insertframetitle};
+          \node[anchor=north west,inner sep=0pt,
+                text width=\dimexpr\paperwidth-\beamer@leftsidebar-0.3cm\relax,
+                align=left]
+            at ([xshift=\beamer@leftsidebar,yshift=-0.85cm]current page.north west)
+            {\usebeamercolor[fg]{framesubtitle}\usebeamerfont{framesubtitle}\insertframesubtitle};
+        \fi
+      \fi
+    \end{tikzpicture}%
+    % Reserve body space: enough for the title block plus a small gap
+    % below it. Multi-line and with-subtitle cases reserve more space.
+    \ifdim\ht\@tempboxa>0.7cm
+      \vbox to1.6cm{}%
+    \else
+      \ifx\insertframesubtitle\@empty
+        \vbox to1.0cm{}%
+      \else
+        \vbox to1.4cm{}%
+      \fi
+    \fi
+  \fi
+}
+
+% Centered frametitle variant: select with \setbeamertemplate{frametitle}[NLc]
+% on a per-frame basis to horizontally centre both title and subtitle on the
+% slide (not on the post-sidebar text area).
+%
+% The beamercolorbox starts at the frametitle template's natural left edge
+% (slide-x = \beamer@leftsidebar) and is given
+%     wd = \paperwidth - 2 \beamer@leftsidebar
+% so its right edge sits at \paperwidth - \beamer@leftsidebar. The box is
+% therefore symmetric about \paperwidth/2 (the slide's geometric centre),
+% and content centred inside it lands exactly on the slide centre.
+\defbeamertemplate*{frametitle}{NLc}[1][]{%
+  \ifx\insertframetitle\@empty
+    % No title: still reserve a small top margin so body doesn't crash
+    % into the top edge.
+    \vbox to0.4cm{}%
+  \else
+    \setbox\@tempboxa=\vbox{%
+      \hsize=\dimexpr\paperwidth-2\beamer@leftsidebar\relax
+      \usebeamerfont{frametitle}\noindent\insertframetitle\par
+    }%
+    \begin{tikzpicture}[remember picture,overlay]
+      \ifdim\ht\@tempboxa>0.7cm
+        % Multi-line title: anchor first line ~0.2 cm from slide top
+        % (half a cap height above the single-line anchor).
+        \node[anchor=north,inner sep=0pt,
+              text width=\dimexpr\paperwidth-2\beamer@leftsidebar\relax,
+              align=center]
+          at ([yshift=-0.2cm]current page.north)
+          {\usebeamercolor[fg]{frametitle}\usebeamerfont{frametitle}\insertframetitle};
+      \else
+        \ifx\insertframesubtitle\@empty
+          % Single line, no subtitle: cap top at logo top (~0.3 mm).
+          \node[anchor=north,inner sep=0pt,
+                text width=\dimexpr\paperwidth-2\beamer@leftsidebar\relax,
+                align=center]
+            at ([yshift=-3mm]current page.north)
+            {\usebeamercolor[fg]{frametitle}\usebeamerfont{frametitle}\insertframetitle};
+        \else
+          % Single line with subtitle: lift title to ~0.2 cm; subtitle
+          % anchored ~0.85 cm from slide top so the gap is ~half a
+          % subtitle-line tall.
+          \node[anchor=north,inner sep=0pt,
+                text width=\dimexpr\paperwidth-2\beamer@leftsidebar\relax,
+                align=center]
+            at ([yshift=-0.2cm]current page.north)
+            {\usebeamercolor[fg]{frametitle}\usebeamerfont{frametitle}\insertframetitle};
+          \node[anchor=north,inner sep=0pt,
+                text width=\dimexpr\paperwidth-2\beamer@leftsidebar\relax,
+                align=center]
+            at ([yshift=-0.85cm]current page.north)
+            {\usebeamercolor[fg]{framesubtitle}\usebeamerfont{framesubtitle}\insertframesubtitle};
+        \fi
+      \fi
+    \end{tikzpicture}%
+    % Reserve body space: enough for the title block plus a small gap
+    % below it. Multi-line and with-subtitle cases reserve more space.
+    \ifdim\ht\@tempboxa>0.7cm
+      \vbox to1.6cm{}%
+    \else
+      \ifx\insertframesubtitle\@empty
+        \vbox to1.0cm{}%
+      \else
+        \vbox to1.4cm{}%
+      \fi
+    \fi
+  \fi
+}
+
+% Footline templates
+\defbeamertemplate*{footline}{NLTitle}[1][]{%Empty footline for title page
+}
+
+\defbeamertemplate*{footline}{NL}[1][]{%Footline for slide without CC
+  \urlstyle{same}
+    \hbox{%
+        \ifx&#1&%
+       % #1 is empty
+       \hspace{0.75\paperwidth}
+    \else
+       % #1 is nonempty
+    \hspace{0.25\paperwidth}
+   \parbox{.50\paperwidth}{
+   	\begin{centering}
+   		\vbox to0.5cm{\vfil{\usebeamercolor[fg]{footline}\usebeamerfont{footline} #1}\vfil}%
+	\end{centering}
+    }%
+    \fi
+    \begin{beamercolorbox}[wd=.1\paperwidth,ht=.5cm,dp=.2cm,center]{date in head/foot}
+        \usebeamerfont{date in head/foot}\insertshortdate{}
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.10\paperwidth,ht=.5cm,dp=.2cm,right,rightskip=4ex]{page number in head/foot}%
+        \usebeamerfont{page number in head/foot}\insertframenumber / \inserttotalframenumber
+    \end{beamercolorbox}%
+    }
+}
+
+\defbeamertemplate*{footline}{NLnoPP}[1][]{%Footline for slide without CC and page number
+  \urlstyle{same}
+    \hbox{%
+        \ifx&#1&%
+       % #1 is empty
+       \hspace{0.75\paperwidth}
+    \else
+       % #1 is nonempty
+    \hspace{0.25\paperwidth}
+   \parbox{.50\paperwidth}{
+   	\begin{centering}
+   		\vbox to0.5cm{\vfil{\usebeamercolor[fg]{footline}\usebeamerfont{footline} #1}\vfil}%
+	\end{centering}
+    }%
+    \fi
+    \begin{beamercolorbox}[wd=.1\paperwidth,ht=.5cm,dp=.2cm,center]{date in head/foot}
+        \usebeamerfont{date in head/foot}\insertshortdate{}
+    \end{beamercolorbox}%
+    %\begin{beamercolorbox}[wd=.10\paperwidth,ht=.5cm,dp=.2cm,right,rightskip=4ex]{page number in head/foot}%
+    %    \usebeamerfont{page number in head/foot}\insertframenumber / \inserttotalframenumber
+    %\end{beamercolorbox}%
+    }
+}
+
+\defbeamertemplate*{footline}{NLCC}[1][]{%Footline for slide with CC
+  \urlstyle{same}
+    \hbox{%
+    \hspace{0.25\paperwidth}%Footline context
+   \parbox{0.5\paperwidth}{
+   	\begin{centering}
+		\tiny
+   		\vbox to0.5cm{\vfil{\usebeamercolor[fg]{footline}\usebeamerfont{footline}\url{www.nordlinglab.org}}\vfil}%
+	\end{centering}
+    }%
+    \begin{beamercolorbox}[wd=.1\paperwidth,ht=.5cm,dp=.2cm,center]{date in head/foot}%
+        \usebeamerfont{date in head/foot}\insertshortdate{}
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.10\paperwidth,ht=.5cm,dp=.2cm,right,rightskip=4ex]{page number in head/foot}%
+        \usebeamerfont{page number in head/foot}\insertframenumber / \inserttotalframenumber
+    \end{beamercolorbox}%
+    }
+}
+
+\defbeamertemplate*{footline}{NLCCnoPP}[1][]{%Footline for slide with CC
+  \urlstyle{same}
+    \hbox{%
+    \hspace{0.25\paperwidth}%Footline context
+   \parbox{0.5\paperwidth}{
+   	\begin{centering}
+		\tiny
+   		\vbox to0.5cm{\vfil{\usebeamercolor[fg]{footline}\usebeamerfont{footline}\url{www.nordlinglab.org}}\vfil}%
+	\end{centering}
+    }%
+    \begin{beamercolorbox}[wd=.1\paperwidth,ht=.5cm,dp=.2cm,center]{date in head/foot}%
+        \usebeamerfont{date in head/foot}\insertshortdate{}
+    \end{beamercolorbox}%
+    %\begin{beamercolorbox}[wd=.10\paperwidth,ht=.5cm,dp=.2cm,right,rightskip=4ex]{page number in head/foot}%
+    %    \usebeamerfont{page number in head/foot}\insertframenumber / \inserttotalframenumber
+    %\end{beamercolorbox}%
+    }
+}
+
+\mode<all>

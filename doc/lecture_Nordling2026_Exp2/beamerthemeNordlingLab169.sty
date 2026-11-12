@@ -1,0 +1,56 @@
+% The Nordling Lab Presentation theme created by Victor Osorio and Torbjörn Nordling, implemented using Beamer by Jose Chang and Torbjörn Nordling.
+% Copyright 2017 by Nordling Lab, Nordron AB
+
+%Presentation Themes 
+%"Conceptually, a presentation theme dictates for every single detail of a presentation what it looks like. Thus, choosing a particular presentation theme will setup for, say, the numbers in enumeration what color they have, what color their background has, what font is used to render them, whether a circle or ball or rectangle or whatever is drawn behind them, and so forth. Thus, when you choose a presentation theme, your presentation will look the way someone (the creator of the theme) thought that a presentation should look like. Presentation themes typically only choose a particular color theme, font theme, inner theme, and outer theme that go well together." Beamer User Guide sec. 15.1
+
+% Please remember to set the aspect ratio of your beamer presentation to 16:9
+% You can do this by using the following command
+% \documentclass[aspectratio=169]{beamer} instead of \documentclass{beamer}
+
+% Requirement
+\RequirePackage{tikz}
+
+\mode<presentation>
+
+% Settings
+\usecolortheme{NordlingLab}
+\usefonttheme{NordlingLab}
+\useinnertheme{NordlingLab}
+\useoutertheme{NordlingLab169}
+\setbeamertemplate{background}[NLCC] %Use this background to get CC license logo
+\setbeamertemplate{footline}[NLCC] %Use this footline to get CC license URL
+\setbeamertemplate{frametitle}[NL] %Default to left-aligned title; use [NLc] for centered
+
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{blocks}[rounded][shadow=true]  
+\setbeamertemplate{items}[square]
+\setbeamertemplate{sections/subsections in toc}[square]
+
+\setbeamersize{text margin left=0cm}
+\setbeamersize{text margin right=2.4cm}
+\setbeamersize{sidebar width left=2.1cm} %Reserves the banner strip so \textwidth content cannot encroach
+\setbeamertemplate{sidebar left}{} %Empty sidebar — the banner image is still drawn by the background template
+\setbeamertemplate{sidebar canvas left}{} %Empty canvas — otherwise the default palette fill covers the banner
+
+% Body-safe sidebar switching. \setbeamersize is preamble-only (it calls \geometry),
+% so we update \beamer@leftsidebar, \oddsidemargin, and \textwidth directly. These
+% are what LaTeX/Beamer read when laying out the next frame.
+\makeatletter
+\newcommand{\NLnosidebar}{%
+  \setlength{\beamer@leftsidebar}{0pt}%
+  \setlength{\oddsidemargin}{\dimexpr\beamer@leftmargin-1in\relax}%
+  \setlength{\textwidth}{\dimexpr\paperwidth-\beamer@leftmargin-\beamer@rightmargin-\beamer@rightsidebar\relax}%
+  \hsize=\textwidth\linewidth=\textwidth%
+}
+\newcommand{\NLsidebar}{%
+  \setlength{\beamer@leftsidebar}{2.1cm}%
+  \@tempdima=\beamer@leftmargin%
+  \advance\@tempdima\beamer@leftsidebar%
+  \setlength{\oddsidemargin}{\dimexpr\@tempdima-1in\relax}%
+  \setlength{\textwidth}{\dimexpr\paperwidth-\@tempdima-\beamer@rightmargin-\beamer@rightsidebar\relax}%
+  \hsize=\textwidth\linewidth=\textwidth%
+}
+\makeatother
+
+\mode<all>
