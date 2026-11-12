@@ -1,11 +1,11 @@
 # Copyright 2026 Torbjörn E. M. Nordling <t@nordlinglab.org>
 # SPDX-License-Identifier: Apache-2.0
-"""The data quality report of a motor folder in Markdown (data/README.md).
+"""The data quality report of a motor folder in Markdown (README.md, Data).
 
 `render_report` writes ``data/raw/<folder>/quality.md``, and `readme_row` the
 folder's row of the summary table between the quality-summary markers of
-data/README.md, both from `quality.assess_folder` and `quality.finish`.
-Each line holds one sentence (data/README.md: semantic line breaks).
+a README, both from `quality.assess_folder` and `quality.finish`.
+Each line holds one sentence (semantic line breaks).
 """
 
 from __future__ import annotations
@@ -27,9 +27,10 @@ REPORT_NAME = "quality.md"
 REPORT_VERSION = "1.0.0"
 README_START = "<!-- quality-summary: start -->"
 README_END = "<!-- quality-summary: end -->"
-# Short labels for the summary in data/README.md.
+# Short labels for the summary table of a README.
 SHORT = {
-    "not-processed": "not tracked yet",
+    "not-tracked": "not tracked yet",
+    "not-processed": "not processed yet",
     "not-filmed": "trials outside the video",
     "not-synchronised": "trials not synchronised",
     "few-usable": "few usable frames",
@@ -61,7 +62,7 @@ def replace_marked(text: str, start: str, end: str, new: str) -> str:
 
 
 def _sentences(text: str, indent: str) -> str:
-    """One sentence per line (data/README.md: semantic line breaks)."""
+    """One sentence per line (semantic line breaks)."""
     parts = [p.strip() for p in text.replace(". ", ".\n").splitlines() if p.strip()]
     return ("\n" + indent).join(parts)
 
@@ -281,7 +282,7 @@ def render_report(
 
 
 def readme_header() -> list[str]:
-    """Header of the summary table in data/README.md."""
+    """Header of the summary table of a README."""
     return [
         "| Folder | Motor | Runs | Trials | Synchronised by | Quality |",
         "|---|---|---|---|---|---|",
@@ -289,7 +290,7 @@ def readme_header() -> list[str]:
 
 
 def readme_row(fq: FolderQuality) -> str:
-    """The folder's row of the summary table in data/README.md."""
+    """The folder's row of the summary table of a README."""
     trials = [t for rq in fq.runs for t in rq.trials]
     syncs = Counter(
         (t.record.get("sync") or "").split("+")[-1] or "none"

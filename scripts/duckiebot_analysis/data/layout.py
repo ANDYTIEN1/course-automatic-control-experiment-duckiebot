@@ -6,7 +6,7 @@
 A motor folder is ``data/raw/db17-<robot>-<motor>-<id>/``, or
 ``db17-<robot>-both-<left id>-<right id>/`` for runs driving both motors; its
 processed data goes to ``data/processed/`` under the same name
-(data/README.md). Folders named before the motor identifiers were required,
+(README.md, Data). Folders named before the motor identifiers were required,
 such as ``db17-daisy-left``, carry no identifier.
 """
 

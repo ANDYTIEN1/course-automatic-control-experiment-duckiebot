@@ -1,6 +1,6 @@
 # Copyright 2026 Torbjörn E. M. Nordling <t@nordlinglab.org>
 # SPDX-License-Identifier: Apache-2.0
-"""Quality of the data of a motor folder, and its report (data/README.md).
+"""Quality of the data of a motor folder, and its report (README.md, Data).
 
 Every trial and run is checked against the thresholds of `Thresholds`.
 A finding is a warning, when the data should not be used for the quantities
@@ -8,7 +8,7 @@ it affects, or a note, when it states a limitation.
 A trial with a warning gets a recommendation: use a trial of the same
 condition without warnings, or redo the experiment.
 
-`quality_markdown` writes the report and the summary in data/README.md;
+`quality_markdown` writes the report and a summary table for a README;
 `scripts/quality_report.py` runs both on the processed data (data/schema.md
 §11).
 """
@@ -463,11 +463,18 @@ def recommend(
         if not tq.warned:
             tq.recommendation = None
             continue
-        if any(i.code == "not-processed" for i in tq.issues):
+        if any(i.code == "not-tracked" for i in tq.issues):
             # The video exists; only its frame table is missing.
             tq.recommendation = (
                 "Track the video with scripts/track_video.py and process the "
-                "folder (data/README.md, pipeline steps 1 and 2)."
+                "folder with scripts/process_raw.py (README.md, From video to "
+                "figures, steps 2 and 3)."
+            )
+            continue
+        if any(i.code == "not-processed" for i in tq.issues):
+            tq.recommendation = (
+                "Process the folder with scripts/process_raw.py (README.md, "
+                "From video to figures, step 3)."
             )
             continue
         alternatives = [
@@ -625,13 +632,19 @@ def assess_folder(
         rq = RunQuality(run.run, run.experiment, run.mode, None)
         path = processed / f"{run.run}.parquet"
         if not path.is_file():
-            rq.issues.append(
-                Issue(
+            if layout.frames_path(raw, run.run).is_file():
+                issue = Issue(
                     "warning",
                     "not-processed",
+                    "The run is not processed yet, so nothing is computed from it.",
+                )
+            else:
+                issue = Issue(
+                    "warning",
+                    "not-tracked",
                     "The run has no frame table yet, so nothing is computed from it.",
                 )
-            )
+            rq.issues.append(issue)
             rq.trials = [
                 TrialQuality(
                     t, run.run, condition_of(t, run.experiment), run.experiment

@@ -5,11 +5,12 @@
 
 Reads ``data/raw/<folder>/`` and ``data/processed/<folder>/`` (run
 ``scripts/process_raw.py`` first), writes ``data/raw/<folder>/quality.md``, and
-with ``--readme`` replaces the summary table between the quality-summary
-markers of data/README.md.
+with ``--readme FILE`` replaces the summary table between the lines
+``<!-- quality-summary: start -->`` and ``<!-- quality-summary: end -->``
+of FILE, a Markdown file you add these lines to.
 
 Example:
-    python scripts/quality_report.py --readme data/README.md
+    python scripts/quality_report.py --raw data/raw --processed data/processed
 """
 
 from __future__ import annotations
@@ -39,7 +40,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         default=Path("data/processed"),
         help="processed data root",
     )
-    p.add_argument("--readme", type=Path, help="data/README.md to update")
+    p.add_argument(
+        "--readme",
+        type=Path,
+        help="Markdown file with quality-summary markers to update",
+    )
     p.add_argument(
         "--date", default=date.today().isoformat(), help="report date, YYYY-MM-DD"
     )

@@ -133,3 +133,147 @@ def test_configure_points_at_one_motor(tmp_path):
             cs.E2_RUN,
             cs.E2_PREFIX,
         ) = saved
+
+
+# ------------------------------------------------- case study input checks
+
+_RUNS_HEADER = (
+    "run,video_file,video_sha256,video_bytes,duration_s,resolution,fps_nominal,"
+    "mode,experiment,sync,pi_log,trials,notes\n"
+)
+
+
+def _trace_columns(trial: str, duty: list[float]) -> dict[str, list]:
+    n = len(duty)
+    return {
+        "trial": [trial] * n,
+        "t_trial_s": [k / 240 for k in range(n)],
+        "omega_rad_s": [0.0] * n,
+        "omega_sd_rad_s": [0.1] * n,
+        "u_cmd": duty,
+    }
+
+
+def _write_run(path: Path, trials: list[tuple[str, list[float]]]) -> None:
+    import pyarrow as pa
+    import pyarrow.parquet as pq
+
+    cols: dict[str, list] = {}
+    for name, duty in trials:
+        for k, v in _trace_columns(name, duty).items():
+            cols.setdefault(k, []).extend(v)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    pq.write_table(pa.table(cols), path)
+
+
+def _motion_synced_data(root: Path) -> str:
+    """Write processed runs of the default motor whose E2 trial lacks LED sync."""
+    import pyarrow as pa
+    import pyarrow.parquet as pq
+
+    proc = root / "processed" / cs.MOTOR
+    e1 = cs.E1_TRIAL + "20261024_211603"
+    neg = cs.E1_TRIAL_NEG + "20261024_211708"
+    e2 = cs.E2_PREFIX + "01_20261024_212000"
+    _write_run(
+        proc / f"{cs.LABEL}_A_sweep_dense_x.parquet", [(e1, [0.0]), (neg, [0.0])]
+    )
+    _write_run(proc / f"{cs.LABEL}_C_b060p040_x.parquet", [(e2, [0.0] * 10)])
+    rows = [
+        {"trial": e1, "sync": "log+led", "drift": 1e-5, "timing_sd_s": 1e-4},
+        {"trial": neg, "sync": "log+led", "drift": 1e-5, "timing_sd_s": 1e-4},
+        {"trial": e2, "sync": "log+motion", "drift": None, "timing_sd_s": None},
+    ]
+    pq.write_table(pa.Table.from_pylist(rows), proc / "trials.parquet")
+    return e2
+
+
+def test_case_study_needs_led_synchronisation(tmp_path):
+    trial = _motion_synced_data(tmp_path)
+    with pytest.raises(ValueError, match="LED") as exc:
+        cs.case_study(tmp_path)
+    assert trial in str(exc.value)
+    assert "log+led" in str(exc.value) and "script+led" in str(exc.value)
+
+
+def test_plot_script_reports_motion_sync_without_traceback(tmp_path):
+    import subprocess
+
+    trial = _motion_synced_data(tmp_path)
+    root = Path(__file__).resolve().parents[2]
+    out = subprocess.run(
+        [
+            sys.executable,
+            "scripts/plot_case_study_csme2026.py",
+            "--data",
+            str(tmp_path),
+            "--figures",
+            str(tmp_path / "figures"),
+        ],
+        cwd=root,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert out.returncode != 0
+    assert "Traceback" not in out.stderr
+    assert trial in out.stderr and "LED" in out.stderr
+
+
+def test_speeds_at_06_skips_trials_without_a_hold_at_06(tmp_path):
+    hold = [0.0] * 240 + [0.6] * 480 + [1.0] * 240
+    short = [0.0] * 240 + [0.6] * 120 + [1.0] * 240
+    good = tmp_path / "db17-a-left-m1" / "R1-L-m1_C_b060p040_x.parquet"
+    _write_run(good, [("R1-L-m1_C_b060p040_rep01_20261024_100000", hold)])
+    bad = tmp_path / "db17-b-right-m2" / "R2-R-m2_C_b060p040_x.parquet"
+    _write_run(bad, [("R2-R-m2_C_b060p040_rep01_20261024_100000", short)])
+    assert cs.speeds_at_06(tmp_path) == {"m1": 0.0}
+
+
+def test_speeds_at_06_with_no_usable_trial_is_empty(tmp_path):
+    bad = tmp_path / "db17-b-right-m2" / "R2-R-m2_C_b060p040_x.parquet"
+    _write_run(bad, [("R2-R-m2_C_b060p040_rep01_20261024_100000", [0.6] * 10)])
+    assert cs.speeds_at_06(tmp_path) == {}
+
+
+def test_case_study_refuses_a_motor_other_than_the_configured_one(tmp_path):
+    with pytest.raises(ValueError, match="configure"):
+        cs.case_study(tmp_path, motor="db17-r5-left-m9")
+
+
+def test_quality_tells_to_process_a_tracked_run(tmp_path):
+    from duckiebot_analysis.analysis import quality
+
+    raw = tmp_path / "raw" / "db17-r5-left-m9"
+    raw.mkdir(parents=True)
+    (raw / "setup.toml").write_text(
+        'robot = "r5"\nmotor = "left"\nmotor_label = "m9"\n', encoding="utf-8"
+    )
+    sha = "0" * 64
+    rows = [
+        f"{run},{run}.mp4,{sha},1,1,1280x720,240,stand,C,log+led,"
+        f"pi/{run}_t_events.csv,{run}_t,\n"
+        for run in ("R5-L-m9_C_tracked", "R5-L-m9_C_untracked")
+    ]
+    (raw / "runs.csv").write_text(_RUNS_HEADER + "".join(rows), encoding="utf-8")
+    (raw / "frames").mkdir()
+    (raw / "frames" / "R5-L-m9_C_tracked.parquet").touch()
+    fq = quality.assess_folder(raw, tmp_path / "processed" / raw.name, motion_bias={})
+    quality.finish([fq])
+    tracked, untracked = fq.runs
+    message = " ".join(i.text for i in tracked.issues)
+    assert "not processed" in message and "frame table" not in message
+    assert "process_raw.py" in tracked.trials[0].recommendation
+    assert "track_video.py" not in tracked.trials[0].recommendation
+    assert "no frame table" in " ".join(i.text for i in untracked.issues)
+    assert "track_video.py" in untracked.trials[0].recommendation
+    for rec in (tracked.trials[0].recommendation, untracked.trials[0].recommendation):
+        assert "data/README.md" not in rec
+
+
+def test_student_scripts_cite_no_missing_data_readme():
+    scripts = Path(__file__).resolve().parents[1]
+    paths = [p for p in scripts.rglob("*.py") if "tests" not in p.parts]
+    if not (scripts.parent / "data" / "README.md").exists():
+        cited = [p.name for p in paths if "data/README.md" in p.read_text("utf-8")]
+        assert cited == []

@@ -83,9 +83,13 @@ def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
     figures = args.figures
     macros = args.macros if args.macros is not None else figures / "results.tex"
-    configure(args.folder, args.label)
     command = f"{COMMAND} --folder {args.folder} --label {args.label}"
-    cs = case_study(args.data)
+    try:
+        configure(args.folder, args.label)
+        cs = case_study(args.data)
+    except (FileNotFoundError, ValueError) as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 1
     for path in make_all(cs, figures, macros, command):
         print(path)
     rest = figures / "fig-rest-noise.pdf"

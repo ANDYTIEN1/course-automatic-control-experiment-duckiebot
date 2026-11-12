@@ -223,7 +223,10 @@ def speeds_at_06(processed: Path) -> dict[str, float]:
                 t = np.asarray(d["t_trial_s"], float)[s]
                 w = np.asarray(d["omega_rad_s"], float)[s]
                 u = np.asarray(d["u_cmd"], float)[s]
-                hold = next(h for h in hold_segments(t, u, 1.0) if h[0] == 0.6)
+                # A trial without a 1 s hold at 0.6 gives no speed.
+                hold = next((h for h in hold_segments(t, u, 1.0) if h[0] == 0.6), None)
+                if hold is None:
+                    continue
                 speeds.append(abs(hold_speed(t, w, hold[1], hold[2], FINAL_S)))
         if speeds:
             out[folder.name.rsplit("-", 1)[1]] = float(np.mean(speeds))
@@ -381,6 +384,25 @@ def configure(folder: str, label: str) -> None:
     E2_PREFIX = f"{label}_C_b060p040_rep"
 
 
+def check_led_sync(trials: dict[str, dict], names: list[str]) -> None:
+    """Raise unless every named trial has the clock drift of an LED sync.
+
+    A trial synchronised by motion (log+motion, script+motion) has no drift
+    or timing uncertainty (§10.3), and the case study needs both.
+
+    Raises:
+        ValueError: Naming the first trial without them.
+    """
+    for name in names:
+        row = trials.get(name, {})
+        if row.get("drift") is None or row.get("timing_sd_s") is None:
+            raise ValueError(
+                f"{name}: synchronised by {row.get('sync') or 'no clock'}, but the "
+                "case study needs LED synchronisation (log+led or script+led); "
+                "re-record the clip with the LED in view."
+            )
+
+
 def _one_run(folder: Path, pattern: str) -> Path:
     """Return the only run of ``folder`` matching ``pattern``."""
     found = sorted(folder.glob(pattern))
@@ -406,8 +428,18 @@ def case_study(data_root: Path, motor: str | None = None) -> CaseStudy:
         data_root: The data/ folder holding raw/ and processed/.
         motor: The motor folder name, the same in raw/ and processed/
             (default: MOTOR, set by configure()).
+
+    Raises:
+        ValueError: If motor differs from the folder set by configure(), whose
+            run and trial names and wheel channel would not fit it, or a trial
+            used is not synchronised by the LED.
     """
-    motor = motor or MOTOR
+    if motor is not None and motor != MOTOR:
+        raise ValueError(
+            f"{motor}: call configure({motor!r}, label) first; the case study "
+            f"is configured for {MOTOR}"
+        )
+    motor = MOTOR
     proc = data_root / "processed" / motor
     raw = data_root / "raw" / motor
     e1_path = _one_run(proc, E1_RUN)
@@ -417,6 +449,7 @@ def case_study(data_root: Path, motor: str | None = None) -> CaseStudy:
     e1 = _one_trial(e1_all, E1_TRIAL)
     neg = _one_trial(e1_all, E1_TRIAL_NEG)
     e2 = {k: v for k, v in load_traces(e2_path).items() if k.startswith(E2_PREFIX)}
+    check_led_sync(trials, [e1.trial, neg.trial, *sorted(e2)])
     e2_changes = _e2_changes(raw, e2, trials)
     first_cmd = {n: c[0] for n, c in e2_changes.items()}
     for tr in (e1, neg):

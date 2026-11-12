@@ -3,12 +3,12 @@
 # SPDX-License-Identifier: Apache-2.0
 """Process a motor folder into angle, speed, acceleration, and input.
 
-Pipeline step 2 of data/README.md: reads ``data/raw/db17-<robot>-<motor>-<id>/``
-and writes ``<run>.parquet`` per run and ``trials.parquet`` (data/schema.md
-§11). Runs without a frame table are skipped with a message. A floor run
-whose frame table has the spoke columns of scripts/track_video.py takes its
-wheel angle from the spokes (§9.5); one without them keeps the marker angle,
-with a note.
+Step 3 of README.md, From video to figures: reads
+``data/raw/db17-<robot>-<motor>-<id>/`` and writes ``<run>.parquet`` per run
+and ``trials.parquet`` (data/schema.md §11). Runs without a frame table are
+skipped with a message. A floor run whose frame table has the spoke columns
+of scripts/track_video.py takes its wheel angle from the spokes (§9.5); one
+without them keeps the marker angle, with a note.
 
 Example:
     python scripts/process_raw.py data/raw/db17-daisy-left --run L_Sweep_20261015_012223

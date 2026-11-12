@@ -7,7 +7,7 @@
 Runs the tracker and the angle computation on the video, then stores the crops
 of the frames of smallest, median, mean and largest uncertainty, and the numbers
 the figure draws. The videos are not stored in this repository
-(data/README.md), so the figure is redrawn from these files alone;
+(README.md, Data), so the figure is redrawn from these files alone;
 build/wheel_frames/wheel_frames_example.json names the video by its checksum.
 
 Usage:
