@@ -615,4 +615,23 @@ logs/**
 # Add project-specific ignore rules here (evaluated AFTER the generated rules
 # above). Because .gitignore is last-match-wins, put OVERRIDES here — e.g.
 # `!build/keep.txt` to re-include a path a generated rule ignores.
+
+# Videos are 1 to 2.4 GB each; git keeps only the frame table the tracker
+# reduces each video to, and runs.csv names the video by its checksum.
+*.mp4
+*.MP4
+*.mov
+*.MOV
+*.avi
+*.mkv
+# Computed from data/raw/ by the scripts, so regenerated, never committed.
+data/processed/
+data/interim/
+# Python environment and caches.
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
 # <<< NINIT USER SECTION (BOTTOM) END
