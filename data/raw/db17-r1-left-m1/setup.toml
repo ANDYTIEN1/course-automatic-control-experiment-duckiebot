@@ -1,0 +1,10 @@
+robot = "r1"
+motor = "left"
+motor_label = "m1"
+hat = "Adafruit DC & Stepper Motor HAT, PCA9685 at 0x60"
+hat_channel = "M1"
+pwm_frequency_hz = 1600
+quantisation = "pca9685"
+positive_duty_turns = "ccw"
+marker = "blue tape on the yellow wheel, from the hub to the rim"
+sync_led = "green LED on GPIO21, switched just before every motor command"
