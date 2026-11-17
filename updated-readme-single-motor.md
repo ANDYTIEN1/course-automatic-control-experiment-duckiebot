@@ -242,6 +242,7 @@ Bring a laptop with the repository cloned, so that you can copy the Pi logs befo
    Go to the folder of the test script, and start `tmux`, so that a test continues if the connection drops (the same command reconnects):
 
    ```bash
+   source ~/venv/bin/activate
    cd ~/experiments
    tmux new -A -s run
    ```
