@@ -115,6 +115,20 @@ class TrackConfig:
         floor_led_radius: Floor only: LED search radius around the hub in px.
         tracker_script: Script path recorded in the metadata.
         led_colour: Sync LED colour, ``red`` or ``green`` (blobs.LED_SIGNALS).
+        led_follow: Stand only: when set, the LED grid follows the LED blob
+            frame by frame within this many px of led_xy, for a camera or
+            robot that drifts during the run; None keeps the grid fixed.
+        wheel_follow: Stand only: when set, the hub and marker disks follow
+            the hub frame by frame, up to this many px from their start, for a
+            camera or robot that drifts; None keeps them fixed (§9.4 still
+            subtracts the hub, so only the search disks move).
+        led_average: Stand only: store each LED cell as the mean over this
+            many frames ending at the frame, to cancel the flicker of mains
+            lighting when the camera samples it in step (2 at 240 fps under
+            120 Hz flicker); it delays the LED signal by (n - 1)/2 frames.
+        led_offset: Stand, with led_follow: (dx, dy) px from the followed
+            LED-coloured blob to the grid centre, for an LED whose lit core is
+            not where its unlit tint is.
     """
 
     mode: str
@@ -130,6 +144,10 @@ class TrackConfig:
     floor_led_radius: float | None = None
     tracker_script: str = "scripts/track_video.py"
     led_colour: str = "red"
+    led_follow: float | None = None
+    wheel_follow: float | None = None
+    led_average: int = 1
+    led_offset: tuple[float, float] = (0.0, 0.0)
 
 
 # ---------------------------------------------------------------- helpers
@@ -141,6 +159,85 @@ def _snap_led(x: float, y: float, w: int, h: int) -> tuple[float, float]:
     x = min(max(math.floor(x) + 0.5, lo), w - 1 - lo)
     y = min(max(math.floor(y) + 0.5, lo), h - 1 - lo)
     return x, y
+
+
+# LED following (TrackConfig.led_follow): pixels that count as LED-coloured,
+# whether the LED is lit or not, since an unlit coloured LED keeps its tint.
+FOLLOW_MIN_PX = 20
+FOLLOW_STEP_PX = 30.0  # search disk around the previous frame's position
+
+
+def _follow_led(
+    frame: np.ndarray,
+    prev: tuple[float, float],
+    start: tuple[float, float],
+    radius: float,
+    x0: int,
+    y0: int,
+    colour: str,
+) -> tuple[float, float]:
+    """Return the LED grid centre for this frame, following the LED blob.
+
+    The centre moves to the centroid of the LED-coloured pixels within
+    FOLLOW_STEP_PX of ``prev`` (and within ``radius`` of ``start``); with
+    fewer than FOLLOW_MIN_PX such pixels it stays at ``prev``.
+    """
+    on, off = led_channels(colour)
+    f = frame.astype(np.int16)
+    third = 3 - on - off
+    mask = (f[..., on] - f[..., off] > 25) & (f[..., on] - f[..., third] > 40) & (
+        f[..., on] > 120
+    )
+    h, w = mask.shape
+    yy, xx = np.ogrid[:h, :w]
+    px, py = prev[0] - x0, prev[1] - y0
+    sx, sy = start[0] - x0, start[1] - y0
+    near = ((xx - px) ** 2 + (yy - py) ** 2 <= FOLLOW_STEP_PX**2) & (
+        (xx - sx) ** 2 + (yy - sy) ** 2 <= radius**2
+    )
+    ys, xs = np.nonzero(mask & near)
+    if len(xs) < FOLLOW_MIN_PX:
+        return prev
+    return _snap_led(xs.mean() + x0, ys.mean() + y0, w + x0 + 10**6, h + y0 + 10**6)
+
+
+WHEEL_FOLLOW_MIN_PX = 200  # hub pixels needed to move the disks
+
+
+def _follow_wheel(
+    frame: np.ndarray,
+    prev: tuple[float, float],
+    start: tuple[float, float],
+    radius: float,
+    r_marker: float,
+    r_hub: float,
+    marker: ColourRule,
+    hub: ColourRule,
+    x0: int,
+    y0: int,
+) -> tuple[tuple[float, float], dict[str, Any]]:
+    """Track hub and marker with disks centred on the hub, moved each frame.
+
+    The hub disk is recentred twice on the centroid of the hub pixels in it,
+    starting from the previous frame's hub; the marker disk shares its centre.
+    A centre more than ``radius`` from ``start``, or with too few hub pixels,
+    falls back to ``prev``.
+    """
+    shape = frame.shape[:2]
+    hmask = hub.mask(frame)
+    cx, cy = prev
+    for _ in range(2):
+        mom = blob_moments(hmask & disk_mask(shape, cx, cy, r_hub, x0, y0), x0, y0)
+        if mom.n < WHEEL_FOLLOW_MIN_PX:
+            break
+        if math.hypot(mom.x - start[0], mom.y - start[1]) > radius:
+            break
+        cx, cy = mom.x, mom.y
+    h = blob_moments(hmask & disk_mask(shape, cx, cy, r_hub, x0, y0), x0, y0)
+    m = blob_moments(
+        marker.mask(frame) & disk_mask(shape, cx, cy, r_marker, x0, y0), x0, y0
+    )
+    return (cx, cy), {"marker": m, "hub": h}
 
 
 def _tracker_commit() -> dict[str, Any]:
@@ -285,8 +382,12 @@ def stand_crop(
     led_xy: tuple[float, float] | None,
     width: int,
     height: int,
+    extra: tuple[float, float, float] | None = None,
 ) -> tuple[int, int, int, int]:
     """Return the crop (w, h, x0, y0) holding both regions and the LED grid.
+
+    ``extra``, a disk ``(cx, cy, r)``, is included too: the LED search area
+    when the LED grid follows the LED (TrackConfig.led_follow).
 
     The offsets are even for the chroma. The decoded pixels depend on the crop,
     so anything that reproduces the tracker's pixel counts must decode with it.
@@ -299,6 +400,9 @@ def stand_crop(
     if led_xy is not None:
         xs += [led_xy[0] - LED_GRID_HALF_PX, led_xy[0] + LED_GRID_HALF_PX]
         ys += [led_xy[1] - LED_GRID_HALF_PX, led_xy[1] + LED_GRID_HALF_PX]
+    if extra is not None:
+        xs += [extra[0] - extra[2], extra[0] + extra[2]]
+        ys += [extra[1] - extra[2], extra[1] + extra[2]]
     x0 = max(0, int(math.floor(min(xs))) - 2) // 2 * 2
     y0 = max(0, int(math.floor(min(ys))) - 2) // 2 * 2
     x1 = min(width, int(math.ceil(max(xs))) + 2)
@@ -340,28 +444,56 @@ def _track_stand(
     if cfg.led:
         raw = cfg.led_xy if cfg.led_xy is not None else located["led"]  # type: ignore[index]
         led_xy = _snap_led(raw[0], raw[1], info.width, info.height)
-    cw, ch, x0, y0 = stand_crop(mreg, hreg, led_xy, info.width, info.height)
+    extra = None
+    if led_xy is not None and cfg.led_follow:
+        extra = (led_xy[0], led_xy[1], float(cfg.led_follow) + LED_GRID_HALF_PX)
+    grow = float(cfg.wheel_follow or 0.0)
+    cw, ch, x0, y0 = stand_crop(
+        (mreg[0], mreg[1], mreg[2] + grow),
+        (hreg[0], hreg[1], hreg[2] + grow),
+        led_xy,
+        info.width,
+        info.height,
+        extra=extra,
+    )
     mdisk = disk_mask((ch, cw), *mreg, x0=x0, y0=y0)
     hdisk = disk_mask((ch, cw), *hreg, x0=x0, y0=y0)
     rows: list[dict[str, Any]] = []
     pts: list[int] = []
     leds: list[np.ndarray | None] = []
+    led_now = led_xy
+    hub_now = (hreg[0], hreg[1])
     for p, f in decode_frames(path, info, crop=(cw, ch, x0, y0)):
-        row: dict[str, Any] = {
-            "marker": blob_moments(marker.mask(f) & mdisk, x0, y0),
-            "hub": blob_moments(hub.mask(f) & hdisk, x0, y0),
-        }
-        if led_xy is not None:
-            row["led_xy"] = led_xy
-            leds.append(
-                led_grid(f, led_xy[0], led_xy[1], x0, y0, colour=cfg.led_colour)
+        if cfg.wheel_follow:
+            hub_now, row = _follow_wheel(
+                f, hub_now, (hreg[0], hreg[1]), float(cfg.wheel_follow),
+                mreg[2], hreg[2], marker, hub, x0, y0,
             )
+        else:
+            row = {
+                "marker": blob_moments(marker.mask(f) & mdisk, x0, y0),
+                "hub": blob_moments(hub.mask(f) & hdisk, x0, y0),
+            }
+        if led_now is not None and led_xy is not None:
+            if cfg.led_follow:
+                led_now = _follow_led(
+                    f, led_now, led_xy, float(cfg.led_follow), x0, y0, cfg.led_colour
+                )
+            at = (led_now[0] + cfg.led_offset[0], led_now[1] + cfg.led_offset[1])
+            row["led_xy"] = at
+            leds.append(led_grid(f, at[0], at[1], x0, y0, colour=cfg.led_colour))
         else:
             leds.append(None)
         rows.append(row)
         pts.append(p)
     if led_xy is None:
         method = "no sync LED; LED columns null"
+    elif cfg.led_follow:
+        method = (
+            "started at the given or located position and moved each frame to "
+            "the centroid of the LED-coloured blob within "
+            f"{float(cfg.led_follow):g} px of it"
+        )
     elif cfg.led_xy is not None:
         method = "given on the command line, fixed for the run"
     else:
@@ -371,6 +503,12 @@ def _track_stand(
             "frames, outside the wheel; fixed for the run"
         )
     meta = {
+        "region_follow": (
+            f"hub and marker disks recentred each frame on the hub, within "
+            f"{float(cfg.wheel_follow):g} px of the start"
+            if cfg.wheel_follow
+            else "fixed"
+        ),
         "marker_region": dict(zip(("cx", "cy", "r"), mreg, strict=True)),
         "hub_region": dict(zip(("cx", "cy", "r"), hreg, strict=True)),
         "led_grid": {
@@ -380,6 +518,14 @@ def _track_stand(
             "signal": LED_SIGNAL_TEXT[cfg.led_colour],
         },
     }
+    if cfg.led_average > 1 and leds and all(v is not None for v in leds):
+        g = np.array(leds, float)
+        k = int(cfg.led_average)
+        c = np.cumsum(np.vstack([np.zeros((1,) + g.shape[1:]), g]), axis=0)
+        avg = g.copy()
+        avg[k - 1 :] = (c[k:] - c[:-k]) / k
+        leds = [np.rint(a).astype(np.uint8) for a in avg]
+        meta["led_average_frames"] = k
     return _finish(rows, pts, leds), meta
 
 
