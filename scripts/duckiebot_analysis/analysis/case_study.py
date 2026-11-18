@@ -25,6 +25,7 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass
+import csv
 from pathlib import Path
 
 import numpy as np
@@ -45,7 +46,7 @@ from duckiebot_analysis.analysis.step_response import (
     start_stop_duties,
     step_info,
 )
-from duckiebot_analysis.data.pilogs import read_pi_log
+from duckiebot_analysis.data.pilogs import read_pi_log, reconstruct_schedule
 
 FloatArray = npt.NDArray[np.float64]
 # The motor folder and the start of its run names (label), as in the article.
@@ -169,13 +170,30 @@ def trial_table(path: Path) -> dict[str, dict]:
     return {r["trial"]: r for r in pq.read_table(path).to_pylist()}
 
 
+def _pi_events(log: Path):
+    """Return the Pi events of a trial: its log, or, without one, its schedule.
+
+    A trial whose log is missing (sync script+led) is reconstructed from its
+    row of the motor folder's trials.csv (§10.4), as the processing does.
+    """
+    if log.exists():
+        return read_pi_log(log)
+    trial = log.name.removesuffix("_events.csv")
+    with open(log.parent.parent / "trials.csv", newline="", encoding="utf-8-sig") as f:
+        for row in csv.DictReader(f):
+            if row["trial"] == trial:
+                return reconstruct_schedule(row)
+    raise FileNotFoundError(f"{log}: no Pi log and no trials.csv row for {trial}")
+
+
 def command_changes(log: Path, drift: float) -> list[tuple[float, float]]:
     """Return (time from trial start, duty) of every change of the motor duty.
 
     The command time is the middle of the Pi's call to the driver, scaled by
-    the clock drift (§10.3), as the processing places it.
+    the clock drift (§10.3), as the processing places it. A trial without a
+    Pi log takes its reconstructed schedule (_pi_events).
     """
-    ev = read_pi_log(log)
+    ev = _pi_events(log)
     m = ev.channel == MOTOR_CHANNEL
     tau = (ev.t_s[m] + ev.t_after_s[m]) / 2 * (1 + drift)
     out, prev = [], 0.0
@@ -403,6 +421,20 @@ def check_led_sync(trials: dict[str, dict], names: list[str]) -> None:
             )
 
 
+def _e1_runs(folder: Path, pattern: str) -> list[Path]:
+    """Return the E1 runs of ``folder``: one video with both sweeps, or two.
+
+    A group may film the forward and the backward sweep as separate videos;
+    their traces are then merged, and the trials are found by prefix as before.
+    """
+    found = sorted(folder.glob(pattern))
+    if not 1 <= len(found) <= 2:
+        raise FileNotFoundError(
+            f"{folder}: expected one or two runs matching {pattern}, found {len(found)}"
+        )
+    return found
+
+
 def _one_run(folder: Path, pattern: str) -> Path:
     """Return the only run of ``folder`` matching ``pattern``."""
     found = sorted(folder.glob(pattern))
@@ -442,10 +474,13 @@ def case_study(data_root: Path, motor: str | None = None) -> CaseStudy:
     motor = MOTOR
     proc = data_root / "processed" / motor
     raw = data_root / "raw" / motor
-    e1_path = _one_run(proc, E1_RUN)
+    e1_paths = _e1_runs(proc, E1_RUN)
+    e1_path = e1_paths[0]
     e2_path = _one_run(proc, E2_RUN)
     trials = trial_table(proc / "trials.parquet")
-    e1_all = load_traces(e1_path)
+    e1_all: dict[str, Trace] = {}
+    for path in e1_paths:
+        e1_all |= load_traces(path)
     e1 = _one_trial(e1_all, E1_TRIAL)
     neg = _one_trial(e1_all, E1_TRIAL_NEG)
     e2 = {k: v for k, v in load_traces(e2_path).items() if k.startswith(E2_PREFIX)}

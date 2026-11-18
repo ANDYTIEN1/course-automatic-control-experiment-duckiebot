@@ -85,6 +85,36 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         metavar=("X", "Y"),
         help="stand: LED grid centre in px (located from key frames if omitted)",
     )
+    ap.add_argument(
+        "--led-follow",
+        type=float,
+        metavar="R",
+        help="stand: let the LED grid follow the LED blob frame by frame, up to R px "
+        "from its start, for a camera or robot that drifts during the run",
+    )
+    ap.add_argument(
+        "--wheel-follow",
+        type=float,
+        metavar="R",
+        help="stand: let the hub and marker search disks follow the hub frame by "
+        "frame, up to R px from the given regions, for a camera that drifts",
+    )
+    ap.add_argument(
+        "--led-average",
+        type=int,
+        default=1,
+        metavar="N",
+        help="stand: average each LED cell over N frames, to cancel mains flicker "
+        "sampled in step with the frames (2 at 240 fps under 120 Hz lighting)",
+    )
+    ap.add_argument(
+        "--led-offset",
+        type=float,
+        nargs=2,
+        default=(0.0, 0.0),
+        metavar=("DX", "DY"),
+        help="stand, with --led-follow: px from the followed LED blob to the grid centre",
+    )
     ap.add_argument("--no-led", action="store_true", help="the run has no sync LED")
     ap.add_argument(
         "--led-colour",
@@ -141,6 +171,10 @@ def main(argv: list[str] | None = None) -> int:
         floor_led_radius=args.floor_led_radius,
         tracker_script="scripts/track_video.py",
         led_colour=args.led_colour,
+        led_follow=args.led_follow,
+        wheel_follow=args.wheel_follow,
+        led_average=args.led_average,
+        led_offset=tuple(args.led_offset),
     )
     cols, meta = track_video(args.video, config)
     out.parent.mkdir(parents=True, exist_ok=True)
