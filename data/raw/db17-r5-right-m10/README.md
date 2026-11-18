@@ -10,7 +10,7 @@ Group 05.
 |---|---|
 | Yuan Tien | E14136388 |
 | 林有誼 | E14131574 |
-| 李柏欣 | TODO |
+| 李柏欣 | E14131697 |
 | TODO | TODO |
 | TODO | TODO |
 
