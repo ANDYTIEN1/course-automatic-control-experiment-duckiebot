@@ -1,0 +1,9 @@
+robot = "r8"
+motor = "right"
+motor_label = "m16"
+hat = "Adafruit DC & Stepper Motor HAT"
+hat_channel = "M1"
+positive_duty_turns = "cw"
+marker = "Blue tape on the yellow right wheel"
+sync_led = "Red LED as seen in the recording; the Pi metadata identifies GPIO21"
+# The motor supply voltage, PWM carrier frequency, and driver version were not measured.
