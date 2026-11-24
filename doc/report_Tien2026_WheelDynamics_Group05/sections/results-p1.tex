@@ -1,5 +1,12 @@
-% Only what you found, no interpretation. This file: P1, the dead zone (figures fig-small-duty.pdf and fig-rest-noise.pdf). Every number from results.tex, with unit and uncertainty.
 \section{Results}
 \label{sec:results}
+\subsection{P1: Low-duty response and dead zone}
+At a positive duty of $u=0.20$ on the increasing sweep, the mean wheel speeds were $0.002\pm0.060$ rad/s for the left motor (m9) and $0.19\pm0.38$ rad/s for the right motor (m10). Both means fell below their respective motion thresholds of 0.13 and 0.69 rad/s. In contrast, extrapolating the gains fitted to the step from rest to $u=0.6$ predicted 5.7 and 5.6 rad/s. The first positive duty levels at which motion was detected were 0.30 for m9 and 0.26 for m10, at mean speeds of $5.05\pm0.24$ and $3.2\pm1.3$ rad/s, respectively. The measured low-duty response therefore contradicted P1 (Fig.~\ref{fig:g5-small-duty}). Thresholds refer to sampled levels spaced by 0.02 in duty. The published reference motor (m5) started at 0.34 and stopped at 0.22 on its positive sweep. Both R5 motors therefore started at a lower duty. Differences in motor or gearbox breakaway friction could contribute to this shift; friction was not measured independently.
 
-TODO.
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.49\linewidth]{figures/m9-small-duty.pdf}\hfill
+\includegraphics[width=.49\linewidth]{figures/m10-small-duty.pdf}
+\caption{Steady wheel speed at the low-duty levels of E1. Left panel: m9. Right panel: m10.}\label{fig:g5-small-duty}
+\end{figure}
+
