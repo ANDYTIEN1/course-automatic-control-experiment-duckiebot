@@ -1,7 +1,7 @@
 # R8 right wheel, motor m16
 
 - Group: 04.
-- Members (registered names): 陳晞, 賴鉅元, 林宇恒, 王文中, 陳易謙, 楊舒翔, 陳文康.
+- Members (registered names): 陳晞, 賴鉅元, 林宇恒, 王文中, 陳易謙, 楊舒翔.
 - Recording date: 2026-11-18.
 - Setup: right wheel suspended, blue tape on the yellow wheel, red synchronisation LED visible on video. The Raspberry Pi used a laptop micro-USB connection. The motor supply voltage was not measured.
 - E1 is the recorded forward and backward duty sweep, with 0.02 increments and a top magnitude of 0.36.
