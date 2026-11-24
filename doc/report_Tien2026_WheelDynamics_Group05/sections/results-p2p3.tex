@@ -1,48 +1,44 @@
 \subsection{P2: Gain and time constant at two operating points}
-Across three E2 repetitions per motor, the fitted gain decreased when the step changed from $0\to0.6$ to $0.6\to1.0$ (Table~\ref{tab:g5steps}). The decrease was 30\% for m9 and 28\% for m10. The higher-duty step also had a shorter time constant on both wheels. At full duty the measured steady speeds were 25.5 and 25.0 rad/s, below the respective predictions of 28.7 and 28.0 rad/s obtained by extrapolating the lower-duty fits. A single gain and time constant did not describe both operating points (Figs.~\ref{fig:g5-step-06} and~\ref{fig:g5-step-10}).
+Across three repetitions, the right wheel reached $\UpSixFinal$ rad/s after the step from rest to $u=0.6$ (Fig.~\ref{fig:g5-step-06}). Extrapolating the fitted gain to full duty predicted $\PredOne$ rad/s. The measured full-duty speed was $\MeasOne$ rad/s (Fig.~\ref{fig:g5-step-10}). In the first-order fits without delay, the gain fell by $\GainDrop\%$ and the time constant fell from $\UpSixTau$ ms to $\UpTenTau$ ms (Table~\ref{tab:g5steps}). Both parameters varied with the operating point, contrary to P2.
 
 \begin{figure}[htbp]
-\centering
-\includegraphics[width=.49\linewidth]{figures/m9-step-06.pdf}\hfill
-\includegraphics[width=.49\linewidth]{figures/m10-step-06.pdf}
-\caption{Wheel response to the step from rest to duty 0.6. Left panel: m9. Right panel: m10.}\label{fig:g5-step-06}
+  \centering
+  \includegraphics[width=\linewidth]{fig-step-06.pdf}
+  \caption{Right-wheel response to the step from zero to 0.6 duty, with the first-order fit and speed residual.}
+  \label{fig:g5-step-06}
 \end{figure}
 
 \begin{figure}[htbp]
-\centering
-\includegraphics[width=.49\linewidth]{figures/m9-step-10.pdf}\hfill
-\includegraphics[width=.49\linewidth]{figures/m10-step-10.pdf}
-\caption{Wheel response to the step from duty 0.6 to 1.0. Left panel: m9. Right panel: m10.}\label{fig:g5-step-10}
+  \centering
+  \includegraphics[width=\linewidth]{fig-step-10.pdf}
+  \caption{Right-wheel response from 0.6 to full duty. The plot compares a fit allowing dead time with the prediction from the step to 0.6.}
+  \label{fig:g5-step-10}
 \end{figure}
 
-\begin{table}[htbp]
-\centering\small
-\caption{First-order fits without a delay term and measured step-response indices. Gain is in rad/s per unit duty. Times are in ms and overshoot is in percent. A dash marks an index unresolved by the analysis.}
-\label{tab:g5steps}
-\begin{tabular}{llrrrrr}
-\hline
-Motor & Duty step & $G$ & $\tau$ & $t_r$ & $M_p$ & $t_s$ \\
-\hline
-m9 & $0\to0.6$ & $28.72 \pm 0.33$ & $209.2 \pm 2.8$ & $496$ & -- & $1642$ \\
-m9 & $0.6\to1.0$ & $20.17 \pm 0.18$ & $82.5 \pm 2.1$ & $180$ & -- & -- \\
-m9 & $1.0\to0.6$ & $19.87 \pm 0.18$ & $256.5 \pm 8.7$ & $510$ & -- & $1238$ \\
-m9 & $0.6\to0$ & $29.48 \pm 0.34$ & $59.8 \pm 1.3$ & $113$ & -- & $187$ \\
-m10 & $0\to0.6$ & $28.02 \pm 0.86$ & $203.0 \pm 8.7$ & $504$ & $1.7$ & -- \\
-m10 & $0.6\to1.0$ & $20.2 \pm 1.3$ & $74.2 \pm 7.8$ & $143$ & $2.8$ & -- \\
-m10 & $1.0\to0.6$ & $19.58 \pm 0.24$ & $230.3 \pm 4.1$ & $421$ & $3.4$ & -- \\
-m10 & $0.6\to0$ & $28.70 \pm 0.12$ & $56.2 \pm 1.3$ & $108$ & -- & $181$ \\
-\hline
-\end{tabular}
-\end{table}
+\begin{table*}[htbp]
+  \centering
+  \caption{Right-wheel first-order fits without delay and measured step-response indices. A dash denotes an index unresolved by the analysis.}
+  \label{tab:g5steps}
+  \begin{tabular}{lccccc}
+    \hline
+    Duty step & $G$ (rad/s per unit duty) & $\tau$ (ms) & $t_r$ (ms) & $M_p$ (\%) & $t_s$ (ms) \\
+    \hline
+    $0\to0.6$   & $\UpSixGain$    & $\UpSixTau$    & $\UpSixRise$    & $\UpSixOvershoot$   & -- \\
+    $0.6\to1.0$ & $\UpTenGain$    & $\UpTenTau$    & $\UpTenRise$    & $\UpTenOvershoot$   & -- \\
+    $1.0\to0.6$ & $\DownSixGain$  & $\DownSixTau$  & $\DownSixRise$  & $\DownSixOvershoot$ & -- \\
+    $0.6\to0$   & $\DownZeroGain$ & $\DownZeroTau$ & $\DownZeroRise$ & -- & $\DownZeroSettle$ \\
+    \hline
+  \end{tabular}
+\end{table*}
 
-\subsection{P3: Direction dependence and hysteresis}
-On the positive sweep, m9 started at $u=0.30$ and stopped at 0.22, while m10 started at 0.26 and stopped at 0.20. On the negative sweep, the corresponding signed start and stop duties were $-0.28$ and $-0.20$ for m9 and $-0.28$ and $-0.22$ for m10. Thus, each motor continued rotating at duty magnitudes below those required to start it. The m9 negative sweep carried a tracking warning: the steady-angle scatter was 10.4 times its pixel-based uncertainty. Its thresholds warrant greater caution.
+\subsection{P3: Start--stop hysteresis and transient asymmetry}
+On the positive sweep, the right wheel started at $u=\StartDuty$ and stopped at $u=\StopDuty$ (Fig.~\ref{fig:g5-hysteresis}a). On the negative sweep, the corresponding signed duties were $-\NegStartDuty$ and $-\NegStopDuty$. In both directions, the wheel kept rotating at a duty magnitude below the one required to start it.
 
-The transient asymmetry depended on the pair of steps (Fig.~\ref{fig:g5-hysteresis}). For m9, stopping from 0.6 gave $\tau=59.8$ ms, compared with 209.2 ms for starting. For m10 the corresponding values were 56.2 and 203.0 ms. Between the two nonzero levels the ordering reversed: stepping down from 1.0 to 0.6 took longer than stepping up from 0.6 to 1.0 (256.5 versus 82.5 ms for m9, and 230.3 versus 74.2 ms for m10). Neither pair followed the mirror symmetry predicted by P3.
+Starting from rest gave a time constant of $\UpSixTau$ ms, whereas stopping from 0.6 duty gave $\DownZeroTau$ ms. The mirrored stop response therefore rose faster in the speed-change plot (Fig.~\ref{fig:g5-hysteresis}b). Between the two nonzero duty levels, the ordering reversed: the downward step had a time constant of $\DownSixTau$ ms, compared with $\UpTenTau$ ms for the upward step. These paired responses departed from the mirror symmetry predicted by P3.
 
 \begin{figure}[htbp]
-\centering
-\includegraphics[width=.49\linewidth]{figures/m9-hysteresis.pdf}\hfill
-\includegraphics[width=.49\linewidth]{figures/m10-hysteresis.pdf}
-\caption{Comparison of the upward and downward responses. Left panel: m9. Right panel: m10.}\label{fig:g5-hysteresis}
+  \centering
+  \includegraphics[width=\linewidth]{fig-hysteresis.pdf}
+  \caption{Right-wheel hysteresis. Panel (a) shows steady speed as positive duty was raised and lowered. Panel (b) overlays the speed changes during starting and stopping, with the stop response mirrored.}
+  \label{fig:g5-hysteresis}
 \end{figure}
