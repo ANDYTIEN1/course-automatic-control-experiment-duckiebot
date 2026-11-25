@@ -2,4 +2,72 @@
 \section{Discussion}
 \label{sec:discussion}
 
-TODO.
+\subsection{Physical interpretation and model validity}
+The low-duty response and the different starting and stopping duties
+(Figs.~\ref{fig:g5-small-duty} and~\ref{fig:g5-hysteresis}) indicate that
+the wheel's response depended on its motion history. A plausible explanation
+is that the drive torque had to overcome static friction before motion
+began, while a smaller torque could sustain rotation once the wheel was
+moving. This interpretation is consistent with the distinction between
+static and sliding friction discussed by
+\textcite{armstronghelouvry1994SurveyModelsAnalysis}. The experiment measured
+wheel motion and commanded duty, so it did not identify friction torque
+directly. The detected onset also depended on the sampled duty levels and
+the motion threshold $\OmegaMin$ rad/s. The reported starting and stopping
+duties therefore describe the tested sweep and detection rule, with limited
+resolution near each transition.
+
+The first-order model captured the main shape of individual step responses,
+especially the acceleration from rest to 0.6 duty
+(Fig.~\ref{fig:g5-step-06}). Its residual RMS was $\UpSixRms\%$ of the
+speed change. However, extrapolating this fit to full duty overestimated
+the final speed (Fig.~\ref{fig:g5-step-10}), and the fitted gain and time
+constant changed with the operating point (Table~\ref{tab:g5steps}).
+The gain fitted over a duty increment describes the speed change per unit
+change in duty over that interval. It need not equal the ratio of final
+speed to final duty when the steady response is nonlinear. Thus the fits
+provide empirical descriptions of the tested transitions, while a single
+pair of constant parameters did not describe the full command range.
+Possible contributors include friction, changes in effective motor voltage
+under load, and driver behaviour. Voltage and current were not recorded,
+so these mechanisms cannot be distinguished from these measurements.
+
+The transient asymmetry provides a further limit on a common linear model.
+The time constant for starting was $\StartStopRatio$ times that for
+stopping, whereas the decrease from full duty to 0.6 was slower than the
+reverse increase by a factor of $\DownUpRatio$
+(Table~\ref{tab:g5steps}). This reversal of the ordering shows that a
+single rule that acceleration is always slower than deceleration would
+also be insufficient. Adding a fitted delay left the residual RMS for the
+step to 0.6 unchanged at the reported precision
+($\UpSixRmsD\%$), so a fixed dead time alone did not explain the observed
+departures from the model.
+
+\subsection{Measurement limitations and scope}
+The quality report for \texttt{db17-r5-right-m10} contained no warnings,
+but it noted that the positive sweep's steady-part angle scatter was
+8.98 times the pixel-based uncertainty, indicating tracking errors.
+This limits confidence in the precise low-duty transition levels.
+The step-response run had a lower scatter factor of $\KETwo$ and no
+reported dropped frames. Its first repetition had an LED timing
+uncertainty of $\TimingSd$ ms. Video differentiation and smoothing also
+affect the speed estimate near a command transition, so delays on this
+time scale require caution.
+
+The residuals contain contributions from both model mismatch and
+measurement uncertainty. For the step to full duty, the residual RMS was
+$\UpTenRms\%$ of the speed change, compared with a propagated speed
+uncertainty RMS of $\UpTenNoiseRms\%$ on the same scale.
+Consequently, the residual magnitude alone cannot assign every
+fluctuation to motor dynamics. Likewise, the unresolved settling times
+in Table~\ref{tab:g5steps} reflect the analysis's noise and settling-band
+criterion. Substituting settling times calculated from the fitted model
+would conceal that measurement limitation.
+
+These conclusions apply to motor m10 on R5's right wheel in the stand
+configuration, with three repetitions of the step sequence and one sweep
+in each direction. The missing wheel-radius measurements prevent a
+radius-based conversion to wheel-rim speed, and the experiment did not
+establish ground speed, slip, or behaviour for other motors. A controller based on
+these results would need validation at its intended operating point,
+particularly near starting and stopping, where motion history mattered.

@@ -2,4 +2,17 @@
 \section{Conclusions}
 \label{sec:conclusions}
 
-TODO.
+The measurements of R5's right-wheel motor m10 showed three limitations
+of a single first-order linear model. First, a nonzero duty could leave
+the wheel below the detectable-motion threshold, and the positive sweep
+started at $u=\StartDuty$ but stopped at $u=\StopDuty$. Second, the
+fitted gain decreased by $\GainDrop\%$ between the two upward step
+intervals, while the time constant decreased by a factor of $\TauRatio$.
+Third, the starting and stopping responses, and the upward and downward
+steps between nonzero duties, were asymmetric. These observations
+contradicted the predictions P1--P3 tested in the Results section.
+A first-order fit described the dominant response of an individual
+transition, but its parameters did not transfer across all tested duties
+and motion histories. Tracking uncertainty limited the precision of the
+low-duty thresholds, and the conclusions are restricted to this motor
+under the tested stand conditions.
