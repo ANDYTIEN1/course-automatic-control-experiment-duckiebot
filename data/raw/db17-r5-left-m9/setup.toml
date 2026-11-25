@@ -1,0 +1,13 @@
+# Setup constants of robot R5, left wheel, motor m9 (data/schema.md §6).
+# Facts not yet confirmed are left out on purpose; add them after the recording:
+#   driver, pwm_frequency_hz  as on the Pi
+robot = "r5"
+motor = "left"
+motor_label = "m9"
+hat = "Adafruit DC & Stepper Motor HAT, PCA9685 at 0x60"
+hat_channel = "M2"
+quantisation = "pca9685"
+supply = "RPi UPSPack Standard Li-polymer battery"
+marker = "blue tape on the yellow wheel, from the hub to the rim"
+positive_duty_turns = "ccw"
+sync_led = "green LED on GPIO21, switched just before every motor command"
