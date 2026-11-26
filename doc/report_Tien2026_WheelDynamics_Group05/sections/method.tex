@@ -1,5 +1,27 @@
-% Past tense. Equipment with models and settings (a table), the procedure of E1 and E2, and the data analysis with the scripts that produce each result.
 \section{Method}
 \label{sec:method}
 
-TODO.
+% DRAFT for Group 05. Lines marked [CHECK] must be filled in or compared
+% with data/raw/*/setup.toml, runs.csv, and the lecture slides.
+
+\subsection{Apparatus}
+We tested both drive motors of Duckiebot DB17 robot R5: the left motor m9 and the right motor m10. A Raspberry Pi drove each motor through a PCA9685-based Adafruit DC \& Stepper Motor HAT, with a PWM frequency of 1600~Hz and a 5.1~V supply. The Pi logged every motor command with its time stamp.
+
+A blue marker tape was attached from the hub to the rim of the yellow wheel. A phone camera filmed the wheel in slow-motion mode at 1280$\times$720 pixels and 240 frames per second. % [CHECK] actual camera and frame rate from setup.toml
+A green LED connected to GPIO21 was kept in the camera view. The LED switched just before each motor command, which allowed the video to be synchronised with the command log.
+
+\subsection{Experiments}
+\paragraph{E1: Duty sweep.} The duty was stepped through sampled levels spaced by 0.02, first with increasing and then with decreasing magnitude, for both positive and negative duty. Each level was held for 2~s so that the wheel could reach a steady speed. % [CHECK] range of levels and hold time
+E1 was used to find the start and stop duties (P1, P3).
+
+\paragraph{E2: Step sequence.} The duty followed the sequence $0\to0.6\to1.0\to0.6\to0$, with each level held for 3~s. % [CHECK] hold time
+The sequence was repeated three times for each motor. E2 was used to estimate $G$ and $\tau$ at two operating points (P2) and to compare upward and downward steps (P3).
+
+\subsection{Data processing}
+The videos were analysed with the course scripts. \texttt{track\_video.py} tracked the marker, the hub, and the LED in every frame. \texttt{process\_raw.py} synchronised the frames with the command log using the LED and computed the wheel angle, angular speed, and input, with their uncertainties. The angle uncertainty was derived from the pixel resolution of the tracked marker. \texttt{quality\_report.py} checked each run; a warning was raised when, for example, the scatter of the steady angle was much larger than its pixel-based uncertainty.
+
+For E1, the steady speed at each duty level was summarised as mean $\pm$ standard deviation. % [CHECK] mean +- SD or +- standard error
+The wheel was classified as moving when the magnitude of its mean speed exceeded the motion threshold $\omega_{\min}$, defined as the speed magnitude exceeded by only 1\% of the speeds measured with the wheel at rest before each trial; this gave 0.13~rad/s for m9 and 0.69~rad/s for m10. % [CHECK] how the threshold is defined (e.g. a multiple of rest noise)
+The start duty was the first level in the increasing sweep at which motion was detected, and the stop duty was the last moving level in the decreasing sweep.
+
+For E2, the first-order step response \eqref{eq:step} without a delay term was fitted to each step by least squares, giving $G$ and $\tau$. Results are reported as mean $\pm$ standard deviation over the three repetitions. The rise time, overshoot, and settling time were computed from the measured responses as defined in Section~\ref{sec:theory}. The fitted models were extrapolated to predict the speed at other duties and compared with the measurements.

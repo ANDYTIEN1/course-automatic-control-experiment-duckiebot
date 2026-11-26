@@ -1,5 +1,48 @@
-% The motor equations, the first-order model, and its predictions, with references. Number every equation and define every symbol after it.
 \section{Theory}
 \label{sec:theory}
 
-TODO.
+% DRAFT for Group 05. Lines marked [CHECK] must be compared with the
+% lecture slides (doc/lecture_Nordling2026_Exp2/) and the example report.
+
+\subsection{First-order model of a DC motor driving a wheel}
+A permanent-magnet DC motor converts the armature voltage $V$ into torque. When the armature inductance is neglected, the armature current is $i=(V-k_e\omega)/R$, where $R$ is the armature resistance, $k_e$ the back-EMF constant, and $\omega$ the wheel angular speed. The rotating mass then obeys
+\begin{equation}
+J\dot{\omega} = k_t i - b\omega - T_f,
+\label{eq:motor}
+\end{equation}
+where $J$ is the moment of inertia, $k_t$ the torque constant, $b$ the viscous friction coefficient, and $T_f$ the Coulomb (dry) friction torque. The motor driver applies the PWM duty cycle $u$, so the average voltage is $V=uV_s$ with supply voltage $V_s$.
+
+If dry friction is ignored ($T_f=0$), substituting $i$ into \eqref{eq:motor} gives the linear first-order model
+\begin{equation}
+\tau\dot{\omega}(t)+\omega(t)=G\,u(t),
+\qquad
+\frac{\Omega(s)}{U(s)}=\frac{G}{\tau s+1},
+\label{eq:firstorder}
+\end{equation}
+with gain and time constant
+\begin{equation}
+G=\frac{k_tV_s}{bR+k_tk_e},
+\qquad
+\tau=\frac{JR}{bR+k_tk_e}.
+\label{eq:params}
+\end{equation}
+Both $G$ and $\tau$ depend only on constant physical parameters. The model therefore predicts the same gain and time constant at every operating point.
+
+\subsection{Step response}
+For a step in duty from $u_0$ to $u_1$ at $t=0$, starting from the steady speed $\omega_0=Gu_0$, the solution of \eqref{eq:firstorder} is
+\begin{equation}
+\omega(t)=\omega_0+G\,(u_1-u_0)\left(1-e^{-t/\tau}\right),\qquad t\ge 0.
+\label{eq:step}
+\end{equation}
+The speed reaches 63.2\% of its total change at $t=\tau$ and never overshoots its final value. We characterise measured responses with the rise time $t_r$ (10\% to 90\% of the change), the maximum overshoot $M_p$, and the settling time $t_s$ (time after which the speed stays within $\pm2\%$ of its final value). For the model in \eqref{eq:step}, $t_r=\tau\ln 9\approx2.2\tau$, $M_p=0$, and $t_s\approx3.9\tau$. % [CHECK] 10-90% and 2% band match the course definitions.
+
+\subsection{Predictions tested in this experiment}
+The linear model \eqref{eq:firstorder} leads to three predictions. % [CHECK] Use the exact wording of P1-P3 from the lecture slides.
+\begin{description}
+\item[P1 (no dead zone).] Any nonzero duty produces a proportional steady speed $\omega_\infty=Gu$, so the wheel rotates even at small $|u|$.
+\item[P2 (constant parameters).] The same $G$ and $\tau$ describe steps at different operating points, for example $0\to0.6$ and $0.6\to1.0$.
+\item[P3 (symmetry, no hysteresis).] Upward and downward steps of equal size have mirror-image responses with the same $\tau$, and the duty at which the wheel starts equals the duty at which it stops.
+\end{description}
+
+\subsection{Expected deviations}
+Dry friction breaks these predictions. With $T_f\neq0$ in \eqref{eq:motor}, the wheel stays at rest until the motor torque exceeds the static (breakaway) friction, which produces a dead zone around $u=0$ (against P1). Because static friction is usually larger than kinetic friction, a rotating wheel keeps moving at duties below the one needed to start it, which produces hysteresis (against P3). Friction and back-EMF effects that vary with speed, together with saturation of the driver near full duty, make the apparent $G$ and $\tau$ depend on the operating point (against P2).
