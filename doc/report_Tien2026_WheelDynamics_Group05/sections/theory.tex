@@ -1,9 +1,6 @@
 \section{Theory}
 \label{sec:theory}
 
-% DRAFT for Group 05. Lines marked [CHECK] must be compared with the
-% lecture slides (doc/lecture_Nordling2026_Exp2/) and the example report.
-
 \subsection{First-order model of a DC motor driving a wheel}
 A permanent-magnet DC motor converts the armature voltage $V$ into torque. When the armature inductance is neglected, the armature current is $i=(V-k_e\omega)/R$, where $R$ is the armature resistance, $k_e$ the back-EMF constant, and $\omega$ the wheel angular speed. The rotating mass then obeys
 \begin{equation}
@@ -34,14 +31,14 @@ For a step in duty from $u_0$ to $u_1$ at $t=0$, starting from the steady speed 
 \omega(t)=\omega_0+G\,(u_1-u_0)\left(1-e^{-t/\tau}\right),\qquad t\ge 0.
 \label{eq:step}
 \end{equation}
-The speed reaches 63.2\% of its total change at $t=\tau$ and never overshoots its final value. We characterise measured responses with the rise time $t_r$ (10\% to 90\% of the change), the maximum overshoot $M_p$, and the settling time $t_s$ (time after which the speed stays within $\pm2\%$ of its final value). For the model in \eqref{eq:step}, $t_r=\tau\ln 9\approx2.2\tau$, $M_p=0$, and $t_s\approx3.9\tau$. % [CHECK] 10-90% and 2% band match the course definitions.
+The speed reaches 63.2\% of its total change at $t=\tau$ and never overshoots its final value. We characterise measured responses with the rise time $t_r$ (10\% to 90\% of the change), the maximum overshoot $M_p$, and the settling time $t_s$ (time after which the speed stays within $\pm1\%$ of its final value). For the model in \eqref{eq:step}, $t_r=\tau\ln 9\approx2.2\tau$, $M_p=0$, and $t_s=\tau\ln 100\approx4.6\tau$.
 
 \subsection{Predictions tested in this experiment}
-The linear model \eqref{eq:firstorder} leads to three predictions. % [CHECK] Use the exact wording of P1-P3 from the lecture slides.
+The linear model \eqref{eq:firstorder} leads to three predictions.
 \begin{description}
-\item[P1 (no dead zone).] Any nonzero duty produces a proportional steady speed $\omega_\infty=Gu$, so the wheel rotates even at small $|u|$.
-\item[P2 (constant parameters).] The same $G$ and $\tau$ describe steps at different operating points, for example $0\to0.6$ and $0.6\to1.0$.
-\item[P3 (symmetry, no hysteresis).] Upward and downward steps of equal size have mirror-image responses with the same $\tau$, and the duty at which the wheel starts equals the duty at which it stops.
+\item[P1 (no dead zone).] Any nonzero step moves the wheel: the steady speed is $\omega_\infty=Gu$, so the wheel rotates even at small $|u|$.
+\item[P2 (constant parameters).] $G$ and $\tau$ are the same for every step size and operating point, for example for the steps $0\to0.6$ and $0.6\to1.0$.
+\item[P3 (symmetry, no hysteresis).] A step down is the mirror image of the step up, with the same $\tau$, and the duty at which the wheel starts equals the duty at which it stops.
 \end{description}
 
 \subsection{Expected deviations}
