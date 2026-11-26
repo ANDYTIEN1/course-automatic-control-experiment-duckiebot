@@ -1,0 +1,13 @@
+{
+  "R5": {
+    "L": {
+      "channel": 2,
+      "forward_sign": -1
+    },
+    "R": {
+      "channel": 1,
+      "forward_sign": 1
+    },
+    "verified": true
+  }
+}

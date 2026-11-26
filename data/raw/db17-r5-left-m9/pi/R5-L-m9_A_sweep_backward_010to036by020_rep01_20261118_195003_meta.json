@@ -1,0 +1,422 @@
+{
+  "trial_id": "R5-L-m9_A_sweep_backward_010to036by020_rep01_20261118_195003",
+  "date_time": "2026-11-18T19:51:04",
+  "robot_id": "R5",
+  "label": "R5-L-m9",
+  "motor_id": "m9",
+  "motor_ids": [
+    "m9"
+  ],
+  "side": "L",
+  "position": "L",
+  "experiment": "A",
+  "condition": "sweep_backward_010to036by020",
+  "repeat_index": 1,
+  "direction": "backward",
+  "load_condition": "air",
+  "u_before": 0.0,
+  "u_after": 0.0,
+  "parameters": {
+    "exp": "A",
+    "robot": "R5",
+    "side": "L",
+    "motor": [
+      "m9"
+    ],
+    "repeat": 1,
+    "repeats": 1,
+    "duty": null,
+    "from_rest": false,
+    "direction": "backward",
+    "start": 0.1,
+    "top": 0.36,
+    "step": 0.02,
+    "base": 0.6,
+    "delta": null,
+    "u_from": 0.8,
+    "u_to": -0.8,
+    "pre": 2.0,
+    "hold": 2.0,
+    "settle": 4.0,
+    "rest": 3.0,
+    "load": "air",
+    "clip_limit": 130.0,
+    "supply_setting_v": "NA",
+    "supply_idle_v": "NA",
+    "supply_loaded_v": "NA",
+    "camera_fps": "240",
+    "video": "NA",
+    "dry_run": false,
+    "label": "R5-L-m9"
+  },
+  "schedule": [
+    [
+      0.0,
+      0.0,
+      false,
+      "rest"
+    ],
+    [
+      2.0,
+      -0.1,
+      false,
+      "mark_up_0.100"
+    ],
+    [
+      2.04,
+      -0.1,
+      true,
+      "up_0.100"
+    ],
+    [
+      4.0,
+      -0.12,
+      false,
+      "mark_up_0.120"
+    ],
+    [
+      4.04,
+      -0.12,
+      true,
+      "up_0.120"
+    ],
+    [
+      6.0,
+      -0.14,
+      false,
+      "mark_up_0.140"
+    ],
+    [
+      6.04,
+      -0.14,
+      true,
+      "up_0.140"
+    ],
+    [
+      8.0,
+      -0.16,
+      false,
+      "mark_up_0.160"
+    ],
+    [
+      8.04,
+      -0.16,
+      true,
+      "up_0.160"
+    ],
+    [
+      10.0,
+      -0.18,
+      false,
+      "mark_up_0.180"
+    ],
+    [
+      10.04,
+      -0.18,
+      true,
+      "up_0.180"
+    ],
+    [
+      12.0,
+      -0.2,
+      false,
+      "mark_up_0.200"
+    ],
+    [
+      12.04,
+      -0.2,
+      true,
+      "up_0.200"
+    ],
+    [
+      14.0,
+      -0.22,
+      false,
+      "mark_up_0.220"
+    ],
+    [
+      14.04,
+      -0.22,
+      true,
+      "up_0.220"
+    ],
+    [
+      16.0,
+      -0.24,
+      false,
+      "mark_up_0.240"
+    ],
+    [
+      16.04,
+      -0.24,
+      true,
+      "up_0.240"
+    ],
+    [
+      18.0,
+      -0.26,
+      false,
+      "mark_up_0.260"
+    ],
+    [
+      18.04,
+      -0.26,
+      true,
+      "up_0.260"
+    ],
+    [
+      20.0,
+      -0.28,
+      false,
+      "mark_up_0.280"
+    ],
+    [
+      20.04,
+      -0.28,
+      true,
+      "up_0.280"
+    ],
+    [
+      22.0,
+      -0.3,
+      false,
+      "mark_up_0.300"
+    ],
+    [
+      22.04,
+      -0.3,
+      true,
+      "up_0.300"
+    ],
+    [
+      24.0,
+      -0.32,
+      false,
+      "mark_up_0.320"
+    ],
+    [
+      24.04,
+      -0.32,
+      true,
+      "up_0.320"
+    ],
+    [
+      26.0,
+      -0.34,
+      false,
+      "mark_up_0.340"
+    ],
+    [
+      26.04,
+      -0.34,
+      true,
+      "up_0.340"
+    ],
+    [
+      28.0,
+      -0.36,
+      false,
+      "mark_up_0.360"
+    ],
+    [
+      28.04,
+      -0.36,
+      true,
+      "up_0.360"
+    ],
+    [
+      30.0,
+      -0.34,
+      false,
+      "mark_down_0.340"
+    ],
+    [
+      30.04,
+      -0.34,
+      true,
+      "down_0.340"
+    ],
+    [
+      32.0,
+      -0.32,
+      false,
+      "mark_down_0.320"
+    ],
+    [
+      32.04,
+      -0.32,
+      true,
+      "down_0.320"
+    ],
+    [
+      34.0,
+      -0.3,
+      false,
+      "mark_down_0.300"
+    ],
+    [
+      34.04,
+      -0.3,
+      true,
+      "down_0.300"
+    ],
+    [
+      36.0,
+      -0.28,
+      false,
+      "mark_down_0.280"
+    ],
+    [
+      36.04,
+      -0.28,
+      true,
+      "down_0.280"
+    ],
+    [
+      38.0,
+      -0.26,
+      false,
+      "mark_down_0.260"
+    ],
+    [
+      38.04,
+      -0.26,
+      true,
+      "down_0.260"
+    ],
+    [
+      40.0,
+      -0.24,
+      false,
+      "mark_down_0.240"
+    ],
+    [
+      40.04,
+      -0.24,
+      true,
+      "down_0.240"
+    ],
+    [
+      42.0,
+      -0.22,
+      false,
+      "mark_down_0.220"
+    ],
+    [
+      42.04,
+      -0.22,
+      true,
+      "down_0.220"
+    ],
+    [
+      44.0,
+      -0.2,
+      false,
+      "mark_down_0.200"
+    ],
+    [
+      44.04,
+      -0.2,
+      true,
+      "down_0.200"
+    ],
+    [
+      46.0,
+      -0.18,
+      false,
+      "mark_down_0.180"
+    ],
+    [
+      46.04,
+      -0.18,
+      true,
+      "down_0.180"
+    ],
+    [
+      48.0,
+      -0.16,
+      false,
+      "mark_down_0.160"
+    ],
+    [
+      48.04,
+      -0.16,
+      true,
+      "down_0.160"
+    ],
+    [
+      50.0,
+      -0.14,
+      false,
+      "mark_down_0.140"
+    ],
+    [
+      50.04,
+      -0.14,
+      true,
+      "down_0.140"
+    ],
+    [
+      52.0,
+      -0.12,
+      false,
+      "mark_down_0.120"
+    ],
+    [
+      52.04,
+      -0.12,
+      true,
+      "down_0.120"
+    ],
+    [
+      54.0,
+      -0.1,
+      false,
+      "mark_down_0.100"
+    ],
+    [
+      54.04,
+      -0.1,
+      true,
+      "down_0.100"
+    ],
+    [
+      56.0,
+      -0.0,
+      false,
+      "mark_down_0.000"
+    ],
+    [
+      61.0,
+      0.0,
+      false,
+      "end"
+    ]
+  ],
+  "motor_mapping": {
+    "L": {
+      "channel": 2,
+      "forward_sign": -1
+    },
+    "R": {
+      "channel": 1,
+      "forward_sign": 1
+    }
+  },
+  "mapping_verified": true,
+  "supply": {
+    "setting_v": "NA",
+    "idle_v": "NA",
+    "loaded_v": "NA"
+  },
+  "camera_fps": "240",
+  "video_file": "NA",
+  "sync_method": "green GPIO21 LED switched before the motor; both times logged",
+  "script": "motor_trial.py",
+  "script_version": "d81c76229121",
+  "host": "rpi-trixie-lite",
+  "dry_run": false,
+  "status": "completed",
+  "exclusion_reason": "",
+  "notes": ""
+}

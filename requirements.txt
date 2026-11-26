@@ -7,4 +7,5 @@ numpy>=2.5.3
 pyarrow>=26.0.0
 scipy>=1.18.1
 # Only for running scripts/tests:
+hypothesis
 pytest
