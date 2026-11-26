@@ -398,6 +398,34 @@ If you have time, test the model yourself:
 - Plot the residuals of your fit, and of a fit to the step from 0.6 to 1.0.
   Are they random, or do they show a pattern, and what does that say about the first-order model?
 
+### When the camera drifts, E1 is two videos, or a Pi log is empty
+
+These options and cases were added for group 05, whose phone and robot moved during the runs.
+Use them only when the checks of step 2 or 3 fail as described here.
+
+`track_video.py` first locates the hub, the marker, and the LED, then keeps their search regions fixed for the whole video.
+If the camera or the robot drifts by more than a few pixels, the marker leaves its disk, the tracker may lock onto another blue object, and the LED grid reads the background, so `quality.md` reports few LED edges or a large angle scatter.
+
+- `--wheel-follow R` recentres the hub and marker search disks on the hub in every frame, up to R px from the regions given with `--hub-region` and `--marker-region`.
+  Use it when the wheel moves in the frame; 150 px followed a drift of about 100 px.
+- `--led-follow R` moves the LED grid in every frame to the centroid of the LED-coloured blob within R px of its start at `--led-xy`.
+  Use it when the LED moves in the frame.
+- `--led-offset DX DY`, with `--led-follow`, places the grid DX, DY px from the followed blob.
+  Use it when the blob's centroid lies on the unlit tint around the LED rather than on its lit core, so that the LED edges are missed.
+- `--led-average N` averages each LED cell over N frames.
+  Under 120 Hz room lighting a 240 frames/s camera sees the brightness flicker from frame to frame; N = 2 cancels it, so that only the LED's own switching remains.
+
+Each option is off by default and leaves the tracking unchanged when off.
+The options used are stored in the frame table's metadata, `region_follow`, `led_grid`, and `led_average_frames`.
+
+The case study (`plot_case_study_csme2026.py`) also accepts two cases that the hand-in otherwise excludes:
+
+- **E1 filmed as two videos**, one per sweep direction, such as `R5-R-m10_A_sweep_dense_forward_<YYYYMMDD>` and `R5-R-m10_A_sweep_dense_backward_<YYYYMMDD>`.
+  Both runs match `_A_sweep_dense_`; their traces are merged, and each sweep is read from the run that holds it.
+- **A trial whose Pi log is missing or empty.**
+  The case study then uses the schedule reconstructed from the trial's row of `trials.csv` (identifier, duration, and number of duty changes), as `process_raw.py` does for sync `script+led` (schema §10.4).
+  Its timing rests on the LED alone, so report it as such.
+
 ## Data
 
 The data is organised exactly as in the dataset of the article.
