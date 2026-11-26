@@ -7,7 +7,7 @@
 \subsection{Apparatus}
 We tested both drive motors of Duckiebot DB17 robot R5: the left motor m9 and the right motor m10. A Raspberry Pi drove each motor through a PCA9685-based Adafruit DC \& Stepper Motor HAT, with a PWM frequency of 1600~Hz and a 5.1~V supply. The Pi logged every motor command with its time stamp.
 
-A blue marker tape was attached from the hub to the rim of the yellow wheel. A phone camera filmed the wheel in slow-motion mode at 1280$\times$720 pixels and 240 frames per second. % [CHECK] actual camera and frame rate from setup.toml
+A blue marker tape was attached from the hub to the rim of the yellow wheel. Both wheels were filmed at 1920$\times$1080 pixels: m10 with an iPhone at 120 frames per second, and m9 with an Android phone at 240 frames per second, saved as a 30 frames-per-second file.
 A green LED connected to GPIO21 was kept in the camera view. The LED switched just before each motor command, which allowed the video to be synchronised with the command log.
 
 \subsection{Experiments}
