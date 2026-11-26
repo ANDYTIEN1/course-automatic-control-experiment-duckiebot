@@ -9,7 +9,7 @@ J\dot{\omega} = k_t i - b\omega - T_f,
 \end{equation}
 where $J$ is the moment of inertia, $k_t$ the torque constant, $b$ the viscous friction coefficient, and $T_f$ the Coulomb (dry) friction torque. The motor driver applies the PWM duty cycle $u$, so the average voltage is $V=uV_s$ with supply voltage $V_s$.
 
-If dry friction is ignored ($T_f=0$), substituting $i$ into \eqref{eq:motor} gives the linear first-order model
+If dry friction is ignored ($T_f=0$), substituting $i$ into \eqref{eq:motor} gives the linear first-order model \parencite{franklin2019FeedbackControlDynamic}
 \begin{equation}
 \tau\dot{\omega}(t)+\omega(t)=G\,u(t),
 \qquad
@@ -42,4 +42,4 @@ The linear model \eqref{eq:firstorder} leads to three predictions.
 \end{description}
 
 \subsection{Expected deviations}
-Dry friction breaks these predictions. With $T_f\neq0$ in \eqref{eq:motor}, the wheel stays at rest until the motor torque exceeds the static (breakaway) friction, which produces a dead zone around $u=0$ (against P1). Because static friction is usually larger than kinetic friction, a rotating wheel keeps moving at duties below the one needed to start it, which produces hysteresis (against P3). Friction and back-EMF effects that vary with speed, together with saturation of the driver near full duty, make the apparent $G$ and $\tau$ depend on the operating point (against P2).
+Dry friction breaks these predictions \parencite{armstronghelouvry1994SurveyModelsAnalysis}. With $T_f\neq0$ in \eqref{eq:motor}, the wheel stays at rest until the motor torque exceeds the static (breakaway) friction, which produces a dead zone around $u=0$ (against P1). Because static friction is usually larger than kinetic friction, a rotating wheel keeps moving at duties below the one needed to start it, which produces hysteresis (against P3). Friction and back-EMF effects that vary with speed, together with saturation of the driver near full duty, make the apparent $G$ and $\tau$ depend on the operating point (against P2).
