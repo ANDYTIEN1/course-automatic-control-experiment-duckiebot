@@ -32,7 +32,16 @@ For a step in duty from $u_0$ to $u_1$ at $t=0$, starting from the steady speed 
 \label{eq:step}
 \end{equation}
 The speed reaches 63.2\% of its total change at $t=\tau$ and never overshoots its final value. We characterise measured responses with the rise time $t_r$ (10\% to 90\% of the change), the maximum overshoot $M_p$, and the settling time $t_s$ (time after which the speed stays within $\pm1\%$ of its final value). For the model in \eqref{eq:step}, $t_r=\tau\ln 9\approx2.2\tau$, $M_p=0$, and $t_s=\tau\ln 100\approx4.6\tau$.
-
+A delay between the command and the start of the response, for example in the driver, is modelled by a dead time $\theta\ge0$:
+\begin{equation}
+\omega(t)=
+\begin{cases}
+\omega_0, & t<\theta,\\
+\omega_0+G\,(u_1-u_0)\left(1-e^{-(t-\theta)/\tau}\right), & t\ge\theta.
+\end{cases}
+\label{eq:fopdt}
+\end{equation}
+The ideal model \eqref{eq:step} is the special case $\theta=0$.
 \subsection{Predictions tested in this experiment}
 The linear model \eqref{eq:firstorder} leads to three predictions.
 \begin{description}
