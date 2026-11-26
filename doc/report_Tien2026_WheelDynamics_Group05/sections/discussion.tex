@@ -1,4 +1,6 @@
-% What the results mean, compared with theory and earlier work; limitations and sources of error. Do not repeat the results.
+
+% What the results mean, compared with theory and earlier work;
+% limitations and sources of error. Do not repeat the results.
 \section{Discussion}
 \label{sec:discussion}
 
@@ -49,25 +51,58 @@ but it noted that the positive sweep's steady-part angle scatter was
 8.98 times the pixel-based uncertainty, indicating tracking errors.
 This limits confidence in the precise low-duty transition levels.
 The step-response run had a lower scatter factor of $\KETwo$ and no
-reported dropped frames. Its first repetition had an LED timing
-uncertainty of $\TimingSd$ ms. Video differentiation and smoothing also
-affect the speed estimate near a command transition, so delays on this
-time scale require caution.
+reported dropped frames.
+
+The first repetition of the step-response experiment had an LED timing
+uncertainty of $\TimingSd$ ms. The angular velocity was estimated using
+a weighted local quadratic fit with a half-window of 23 ms.
+Both the timing uncertainty and the temporal resolution of the
+differentiation method limit the interpretation of short transient
+responses. In particular, the fitted delays of approximately 0.9 ms
+for the step from rest to 0.6 duty and 1.5 ms for the step from full
+duty to 0.6 are smaller than the LED timing uncertainty.
+These small delays should therefore not be interpreted as reliable
+evidence of physical motor dead time.
+
+The angular velocity uncertainty was propagated from the angle
+measurement uncertainty through the covariance matrix of the
+weighted local quadratic fit. For the step from duty 0.6 to 1.0,
+the median standard uncertainty of angular velocity was
+$\OmegaSd$ rad/s.
+
+The RMS angular velocity uncertainties for the four duty transitions
+from 0 to 0.6, 0.6 to 1.0, 1.0 to 0.6, and 0.6 to 0 were
+approximately 0.37, 0.36, 0.36, and 0.32 rad/s, respectively.
+These correspond to $\UpSixNoiseRms\%$, $\UpTenNoiseRms\%$,
+$\DownSixNoiseRms\%$, and $\DownZeroNoiseRms\%$ of their
+respective speed changes. The smaller speed changes between
+0.6 and full duty result in larger relative uncertainties,
+even though the absolute angular velocity uncertainties are similar.
 
 The residuals contain contributions from both model mismatch and
 measurement uncertainty. For the step to full duty, the residual RMS was
 $\UpTenRms\%$ of the speed change, compared with a propagated speed
 uncertainty RMS of $\UpTenNoiseRms\%$ on the same scale.
 Consequently, the residual magnitude alone cannot assign every
-fluctuation to motor dynamics. Likewise, the unresolved settling times
-in Table~\ref{tab:g5steps} reflect the analysis's noise and settling-band
-criterion. Substituting settling times calculated from the fitted model
+fluctuation to motor dynamics. The angular velocity uncertainty
+also limits the accuracy with which the transient response and
+steady-state speed can be determined, and should be considered
+when interpreting the fitted gain and time constant.
+
+Furthermore, the RMS angular velocity uncertainties exceed the
+corresponding 1\% settling-band widths for all four duty transitions.
+This makes it difficult to distinguish measurement fluctuations
+from actual deviations of the wheel speed from its final value.
+The unresolved settling times in Table~\ref{tab:g5steps} therefore
+reflect the analysis's noise and settling-band criterion.
+Substituting settling times calculated from the fitted model
 would conceal that measurement limitation.
 
 These conclusions apply to motor m10 on R5's right wheel in the stand
 configuration, with three repetitions of the step sequence and one sweep
 in each direction. The missing wheel-radius measurements prevent a
 radius-based conversion to wheel-rim speed, and the experiment did not
-establish ground speed, slip, or behaviour for other motors. A controller based on
-these results would need validation at its intended operating point,
-particularly near starting and stopping, where motion history mattered.
+establish ground speed, slip, or behaviour for other motors. A controller
+based on these results would need validation at its intended operating
+point, particularly near starting and stopping, where motion history
+mattered.
