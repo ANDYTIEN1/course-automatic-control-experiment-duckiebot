@@ -2,4 +2,9 @@
 \section{Introduction}
 \label{sec:introduction}
 
-TODO.
+In control engineering, permanent-magnet direct-current (DC) motors driving robot wheels are commonly approximated as linear first-order time-invariant (LTI) systems. While this simplified representation facilitates controller design and transient analysis, physical actuators on mobile robots frequently depart from ideal linear behavior due to dry friction, actuator saturation, and operating-point-dependent effects.
+
+In a differential-drive platform such as the Duckiebot, unmodeled actuator nonlinearities or mismatches between the left and right wheel drives can degrade open-loop accuracy and transient consistency. Characterizing where a linear first-order model holds and where nonlinearities emerge is therefore essential before designing feedback controllers.
+
+This experiment evaluates the open-loop rotational dynamics of both drive motors (m9 and m10) on Duckiebot DB17 robot R5 using a duty-cycle sweep (E1) and repeated step sequences (E2) to test three predictions of an ideal linear model: proportional response without a dead zone (P1), operating-point-invariant gain and time constant (P2), and directional symmetry without hysteresis (P3). Section~\ref{sec:theory} derives the first-order motor model and testable predictions, Section~\ref{sec:method} details the experimental apparatus and video-based measurement procedure, and Section~\ref{sec:results} presents the empirical findings for m9 and m10.
+
