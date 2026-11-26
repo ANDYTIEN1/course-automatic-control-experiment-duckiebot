@@ -1,0 +1,2 @@
+# Keep Raspberry Pi logs byte-for-byte as recorded.
+pi/* -text !eol

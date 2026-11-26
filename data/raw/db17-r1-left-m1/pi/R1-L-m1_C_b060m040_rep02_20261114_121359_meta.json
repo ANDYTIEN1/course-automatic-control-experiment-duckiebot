@@ -1,0 +1,116 @@
+{
+  "trial_id": "R1-L-m1_C_b060m040_rep02_20261114_121359",
+  "date_time": "2026-11-14T12:14:12",
+  "robot_id": "R1",
+  "label": "R1-L-m1",
+  "motor_id": "m1",
+  "motor_ids": [
+    "m1"
+  ],
+  "side": "L",
+  "position": "L",
+  "experiment": "C",
+  "condition": "b060m040",
+  "repeat_index": 2,
+  "direction": "forward",
+  "load_condition": "air",
+  "u_before": 0.6,
+  "u_after": 0.2,
+  "parameters": {
+    "exp": "C",
+    "robot": "R1",
+    "side": "L",
+    "motor": [
+      "m1"
+    ],
+    "repeat": 1,
+    "repeats": 3,
+    "duty": null,
+    "from_rest": false,
+    "direction": "forward",
+    "start": 0.05,
+    "top": 1.0,
+    "step": 0.05,
+    "base": 0.6,
+    "delta": -0.4,
+    "u_from": 0.8,
+    "u_to": -0.8,
+    "pre": 2.0,
+    "hold": 3.0,
+    "settle": 3.0,
+    "rest": 2.0,
+    "load": "air",
+    "clip_limit": 130.0,
+    "supply_setting_v": "NA",
+    "supply_idle_v": "NA",
+    "supply_loaded_v": "NA",
+    "camera_fps": "240",
+    "video": "NA",
+    "dry_run": false,
+    "label": "R1-L-m1"
+  },
+  "schedule": [
+    [
+      0.0,
+      0.0,
+      false,
+      "rest"
+    ],
+    [
+      2.0,
+      0.6,
+      false,
+      "settle"
+    ],
+    [
+      5.0,
+      0.2,
+      true,
+      "perturb"
+    ],
+    [
+      8.0,
+      0.6,
+      false,
+      "back"
+    ],
+    [
+      11.0,
+      0.0,
+      false,
+      "off"
+    ],
+    [
+      13.0,
+      0.0,
+      false,
+      "end"
+    ]
+  ],
+  "motor_mapping": {
+    "L": {
+      "channel": 1,
+      "forward_sign": -1
+    },
+    "R": {
+      "channel": 2,
+      "forward_sign": 1
+    }
+  },
+  "mapping_verified": true,
+  "supply": {
+    "setting_v": "NA",
+    "idle_v": "NA",
+    "loaded_v": "NA"
+  },
+  "camera_fps": "240",
+  "video_file": "NA",
+  "sync_method": "green GPIO21 LED switched before the motor; both times logged",
+  "script": "motor_trial.py",
+  "script_version": "d81c76229121",
+  "host": "rpi-trixie-lite",
+  "dry_run": false,
+  "status": "completed",
+  "exclusion_reason": "",
+  "notes": ""
+}
